@@ -2,8 +2,6 @@
     Header
 </div>
 <hr>
-<div>
-    
-    <button>Previous</button>
-    <button>Next</button>
-</div>
+<app-question [question]="currentQuestion"></app-question>
+<button [disabled]="isFirstQuestion" (click)="navigateToPreviousQuestion(currentQuestion)">Previous</button>
+<button [disabled]="isLastQuestion" (click)="navigateToNextQuestion(currentQuestion)">Next</button>

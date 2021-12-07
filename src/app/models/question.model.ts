@@ -2,17 +2,17 @@ export interface Question {
     question_type: QuestionType;
     identifier: string;
     headline: string;
-    description?: string;
+    description: string | null;
     required: boolean;
     jumps: Jump[];
 }
 
-enum QuestionType{
+export enum QuestionType{
     MultipleChoice = 'multiple-choice',
     Text = 'text'
 }
 
-interface Jump {
+export interface Jump {
     conditions: Condition[];
     destination: string;
 }

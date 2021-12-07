@@ -5,7 +5,7 @@ export interface MultipleChoiceQuestion extends Question {
     choices: Choice[];
 }
 
-interface Choice {
+export interface Choice {
     label: string;
     value: string;
     selected: boolean;

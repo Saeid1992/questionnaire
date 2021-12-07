@@ -9,18 +9,27 @@ import { QuestionsContainerComponent } from './components/questions-container/qu
 import { QuestionsService } from './services/questions.service';
 import { ApiService } from './services/api-service';
 import { HttpClientModule } from '@angular/common/http';
+import { TextQuestionComponent } from './components/questions-container/question/text-question/text-question.component';
+import { MultipleChoiceQuestionComponent } from './components/questions-container/question/multiple-choice-question/multiple-choice-question.component';
+import { QuestionComponent } from './components/questions-container/question/question.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
     WelcomeComponent,
     PageNotFoundComponent,
-    QuestionsContainerComponent
+    QuestionsContainerComponent,
+    TextQuestionComponent,
+    MultipleChoiceQuestionComponent,
+    QuestionComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [
     GlobalValuesService,
