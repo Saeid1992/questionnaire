@@ -5,7 +5,10 @@ import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
 import { GlobalValuesService } from './services/global-values.service';
-import { QuestionsContainerComponent } from './questions-container/questions-container.component';
+import { QuestionsContainerComponent } from './components/questions-container/questions-container.component';
+import { QuestionsService } from './services/questions.service';
+import { ApiService } from './services/api-service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -16,10 +19,13 @@ import { QuestionsContainerComponent } from './questions-container/questions-con
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
   ],
   providers: [
-    GlobalValuesService
+    GlobalValuesService,
+    ApiService,
+    QuestionsService
   ],
   bootstrap: [AppComponent]
 })

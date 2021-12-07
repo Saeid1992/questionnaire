@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
-import { QuestionsContainerComponent } from './questions-container/questions-container.component';
+import { QuestionsContainerComponent } from './components/questions-container/questions-container.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'/welcome', pathMatch:'full'},

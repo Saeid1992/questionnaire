@@ -1,3 +1,5 @@
-export interface TextQuestion {
-    multiline: string;
+import { Question } from "./question.model";
+
+export interface TextQuestion extends Question{
+    multiline: string | boolean;
 }

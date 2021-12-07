@@ -9,3 +9,7 @@ export interface Questionnaire {
     description: string;
     category_name_hyphenated: string;
 }
+
+export interface QuestionnaireBase {
+    questionnaire: Questionnaire;
+}

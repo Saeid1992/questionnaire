@@ -1,18 +1,23 @@
 export interface Question {
-    question_type: string;
+    question_type: QuestionType;
     identifier: string;
     headline: string;
-    description: string;
+    description?: string;
     required: boolean;
     jumps: Jump[];
 }
 
-export interface Jump {
+enum QuestionType{
+    MultipleChoice = 'multiple-choice',
+    Text = 'text'
+}
+
+interface Jump {
     conditions: Condition[];
     destination: string;
 }
 
-export interface Condition {
+interface Condition {
     field: string;
     value: string;
 }
