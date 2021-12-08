@@ -6,6 +6,7 @@
   <div *ngIf="questionType === multipleChoiceQuestionType">
     <app-multiple-choice-question
       [multipleChoiceQuestionInfo]="multipleChoiceQuestion"
+      (answerChanged) = "onAnswerChanged($event)"
     ></app-multiple-choice-question>
   </div>
 </div>
