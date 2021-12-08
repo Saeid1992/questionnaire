@@ -64,11 +64,20 @@ export class QuestionComponent implements OnInit, OnChanges {
     }
   }
 
-  onAnswerChanged(mcQuestion: MultipleChoiceQuestion) {
+  onSelectionChanged(mcQuestion: MultipleChoiceQuestion) {
     const answeredQuestionId = this.questionsService.questionsWithAnswers.findIndex(
       item => item.identifier === mcQuestion.identifier
     );
     this.questionsService.questionsWithAnswers[answeredQuestionId] = mcQuestion;
+    console.log(this.questionsService.questionsWithAnswers);
+  }
+
+  onTextChanged(textQuestion: TextQuestion) {
+    console.log(textQuestion);
+    const answeredQuestionId = this.questionsService.questionsWithAnswers.findIndex(
+      item => item.identifier === textQuestion.identifier
+    );
+    this.questionsService.questionsWithAnswers[answeredQuestionId] = textQuestion;
     console.log(this.questionsService.questionsWithAnswers);
   }
 }

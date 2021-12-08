@@ -21,7 +21,7 @@ import { GlobalValuesService } from 'src/app/services/global-values.service';
 })
 export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
   @Input() multipleChoiceQuestionInfo: MultipleChoiceQuestion;
-  @Output() answerChanged = new EventEmitter<MultipleChoiceQuestion>();
+  @Output() selectionChanged = new EventEmitter<MultipleChoiceQuestion>();
 
   currentMultipleChoiceQuestion: MultipleChoiceQuestion;
   initialChoices: Choice[] = [];
@@ -54,7 +54,7 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
         this.currentMultipleChoiceQuestion.choices[
           this.selectedItemIndex
         ].selected = true;
-        this.answerChanged.emit(this.currentMultipleChoiceQuestion);
+        this.selectionChanged.emit(this.currentMultipleChoiceQuestion);
       }
     });
   }

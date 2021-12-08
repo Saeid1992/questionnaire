@@ -1,12 +1,15 @@
 <p>{{ headline }}</p>
 <div>
   <div *ngIf="questionType === textQuestionType">
-    <app-text-question [textQuestionInfo]="textQuestion"></app-text-question>
+    <app-text-question
+      [textQuestionInfo]="textQuestion"
+      (textChanged)="onTextChanged($event)"
+    ></app-text-question>
   </div>
   <div *ngIf="questionType === multipleChoiceQuestionType">
     <app-multiple-choice-question
       [multipleChoiceQuestionInfo]="multipleChoiceQuestion"
-      (answerChanged) = "onAnswerChanged($event)"
+      (selectionChanged)="onSelectionChanged($event)"
     ></app-multiple-choice-question>
   </div>
 </div>
