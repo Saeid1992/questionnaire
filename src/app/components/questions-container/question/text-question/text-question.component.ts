@@ -1,6 +1,16 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { TextQuestion } from 'src/app/models/text-question.model';
+import {
+  TextInputType,
+  TextQuestion,
+} from 'src/app/models/text-question.model';
 import { GlobalValuesService } from 'src/app/services/global-values.service';
 
 @Component({
@@ -12,10 +22,9 @@ export class TextQuestionComponent implements OnInit {
   @Input() textQuestionInfo: TextQuestion;
   @Output() textChanged = new EventEmitter<TextQuestion>();
 
+  isMultiline = false;
   currentTextQuestion: TextQuestion;
-
   questionForm: FormGroup;
-  multiline = '';
 
   constructor(private globalValuesService: GlobalValuesService) {
     // Deep copy
@@ -23,7 +32,7 @@ export class TextQuestionComponent implements OnInit {
       JSON.stringify(this.globalValuesService.DEFAULT_TEXT_QUESTION)
     );
     this.currentTextQuestion = this.textQuestionInfo;
-    this.questionForm = new FormGroup({},{updateOn: 'blur'});
+    this.questionForm = new FormGroup({}, { updateOn: 'blur' });
   }
 
   ngOnInit(): void {
@@ -35,17 +44,14 @@ export class TextQuestionComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes);
-    this.currentTextQuestion =
-      changes.textQuestionInfo.currentValue;
+    this.currentTextQuestion = changes.textQuestionInfo.currentValue;
+    this.isMultiline = this.currentTextQuestion.multiline as boolean;
     this.assignPreviousValue(this.currentTextQuestion);
   }
 
   assignPreviousValue(question: TextQuestion): void {
     console.log(question);
     const previousAnswer = question.answer;
-    this.questionForm.setControl(
-      'userAnswer',
-      new FormControl(previousAnswer)
-    );
+    this.questionForm.setControl('userAnswer', new FormControl(previousAnswer));
   }
 }
