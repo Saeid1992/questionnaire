@@ -4,7 +4,7 @@ export interface Question {
     headline: string;
     description: string | null;
     required: boolean;
-    jumps: Jump[];
+    jumps: Jump[] | SimpleJump[];
 }
 
 export enum QuestionType{
@@ -14,10 +14,20 @@ export enum QuestionType{
 
 export interface Jump {
     conditions: Condition[];
-    destination: string;
+    destination: Destination;
 }
 
-interface Condition {
+export interface SimpleJump {
+  sourceQuestionId: string;
+  value: string;
+  targetQuestionId: string;
+}
+
+export interface Condition {
     field: string;
     value: string;
+}
+
+export interface Destination {
+  id: string;
 }

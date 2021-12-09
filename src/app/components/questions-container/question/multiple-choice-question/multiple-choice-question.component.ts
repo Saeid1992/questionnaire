@@ -7,12 +7,14 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   Choice,
   MultipleChoiceQuestion,
 } from 'src/app/models/multiple-choice-question';
 import { GlobalValuesService } from 'src/app/services/global-values.service';
+import { QuestionsService } from 'src/app/services/questions.service';
+import { ValidateMultipleChoiceQuestion } from 'src/app/validators/multiple-choice-question.validator';
 
 @Component({
   selector: 'app-multiple-choice-question',
@@ -28,7 +30,9 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
   selectedItemIndex: number;
   multiple = '';
   questionForm: FormGroup;
-  constructor(private globalValuesService: GlobalValuesService) {
+
+  constructor(private globalValuesService: GlobalValuesService,
+              private questionsService: QuestionsService) {
     // Deep copy
     this.multipleChoiceQuestionInfo = JSON.parse(
       JSON.stringify(this.globalValuesService.DEFAULT_MULTIPLE_CHOICE_QUESTION)
@@ -39,13 +43,9 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    // this.assignQuestion(this.multipleChoiceQuestionInfo);
     this.questionForm.valueChanges.subscribe((formValue) => {
-      console.log(formValue);
       this.resetFormValue();
-      this.currentMultipleChoiceQuestion.choices = JSON.parse(
-        JSON.stringify(this.initialChoices)
-      );
+      this.currentMultipleChoiceQuestion.choices = this.initialChoices;
       this.selectedItemIndex =
         this.currentMultipleChoiceQuestion.choices.findIndex(
           (ch) => ch.value === formValue.choice
@@ -55,6 +55,7 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
           this.selectedItemIndex
         ].selected = true;
         this.selectionChanged.emit(this.currentMultipleChoiceQuestion);
+        // this.questionsService.isValid.emit(this.questionForm.valid);
       }
     });
   }
@@ -64,25 +65,34 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
     this.currentMultipleChoiceQuestion =
       changes.multipleChoiceQuestionInfo.currentValue;
     this.assignQuestion(this.currentMultipleChoiceQuestion);
+    this.updateValidators(this.currentMultipleChoiceQuestion);
+    console.log(this.questionForm.valid);
+    // this.questionsService.isValid.emit(this.questionForm.valid);
   }
 
   assignQuestion(question: MultipleChoiceQuestion): void {
-    console.log(question);
     let previousAnswer: Choice | undefined;
     this.initialChoices = JSON.parse(JSON.stringify(question.choices));
-    previousAnswer = this.initialChoices.find(ch => ch.selected);
+    previousAnswer = this.initialChoices.find((ch) => ch.selected);
     this.questionForm.setControl(
       'choice',
       new FormControl(this.initialChoices)
     );
-    if(previousAnswer) {
-      this.questionForm.setValue({'choice':previousAnswer.value});
+    if (previousAnswer) {
+      this.questionForm.setValue({ choice: previousAnswer.value });
     }
-    console.log(this.initialChoices);
   }
 
-  resetFormValue() {
-    this.currentMultipleChoiceQuestion.choices.forEach(ch => {
+  updateValidators(question: MultipleChoiceQuestion): void {
+    if (question.required) {
+      // this.questionForm.setValidators();
+      this.questionForm.updateValueAndValidity();
+      this.questionsService.isValid.emit(this.questionForm.valid);
+    }
+  }
+
+  resetFormValue(): void {
+    this.currentMultipleChoiceQuestion.choices.forEach((ch) => {
       ch.selected = false;
     });
   }

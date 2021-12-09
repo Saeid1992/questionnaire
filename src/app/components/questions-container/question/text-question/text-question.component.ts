@@ -6,12 +6,12 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
-  TextInputType,
   TextQuestion,
 } from 'src/app/models/text-question.model';
 import { GlobalValuesService } from 'src/app/services/global-values.service';
+import { QuestionsService } from 'src/app/services/questions.service';
 
 @Component({
   selector: 'app-text-question',
@@ -23,10 +23,12 @@ export class TextQuestionComponent implements OnInit {
   @Output() textChanged = new EventEmitter<TextQuestion>();
 
   isMultiline = false;
+  isRequired = false;
   currentTextQuestion: TextQuestion;
   questionForm: FormGroup;
 
-  constructor(private globalValuesService: GlobalValuesService) {
+  constructor(private globalValuesService: GlobalValuesService,
+              private questionsService: QuestionsService) {
     // Deep copy
     this.textQuestionInfo = JSON.parse(
       JSON.stringify(this.globalValuesService.DEFAULT_TEXT_QUESTION)
@@ -39,19 +41,25 @@ export class TextQuestionComponent implements OnInit {
     this.questionForm.valueChanges.subscribe((formValue) => {
       this.currentTextQuestion.answer = formValue.userAnswer;
       this.textChanged.emit(this.currentTextQuestion);
+      this.questionsService.isValid.emit(this.questionForm.valid);
     });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes);
     this.currentTextQuestion = changes.textQuestionInfo.currentValue;
-    this.isMultiline = this.currentTextQuestion.multiline as boolean;
-    this.assignPreviousValue(this.currentTextQuestion);
+    this.updateQuestion(this.currentTextQuestion);
+    this.questionsService.isValid.emit(this.questionForm.valid);
   }
 
-  assignPreviousValue(question: TextQuestion): void {
-    console.log(question);
+  updateQuestion(question: TextQuestion) {
+    this.isMultiline = question.multiline as boolean;
+    this.isRequired = question.required;
     const previousAnswer = question.answer;
     this.questionForm.setControl('userAnswer', new FormControl(previousAnswer));
+    if(this.isRequired) {
+      this.questionForm.get('userAnswer')?.setValidators(Validators.required);
+      this.questionForm.updateValueAndValidity();
+    }
   }
 }

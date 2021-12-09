@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { GlobalValuesService } from './global-values.service';
 import { HttpClient } from '@angular/common/http';
 import {
@@ -10,13 +10,14 @@ import { map } from 'rxjs/operators';
 import { ApiService } from './api-service';
 import { TextQuestion } from '../models/text-question.model';
 import { MultipleChoiceQuestion } from '../models/multiple-choice-question';
-import { QuestionType } from '../models/question.model';
+import { Jump, QuestionType, SimpleJump } from '../models/question.model';
 
 @Injectable()
 export class QuestionsService {
   url = '';
   apiName = '';
   questionsWithAnswers: Array<TextQuestion | MultipleChoiceQuestion>;
+  isValid = new EventEmitter<boolean>();
 
   constructor(
     private globalValuesService: GlobalValuesService,
@@ -43,6 +44,7 @@ export class QuestionsService {
     let cleanData: Questionnaire;
     let textQuestion: TextQuestion;
     let multipleChoiceQuestion: MultipleChoiceQuestion;
+    let simpleJump: SimpleJump = {sourceQuestionId:'', value: '', targetQuestionId:''};
 
     for (const question of data.questionnaire.questions) {
       switch (question.question_type) {
@@ -62,7 +64,41 @@ export class QuestionsService {
       }
     }
 
+    data.questionnaire.questions.forEach((qt => {
+      if(qt.jumps.length > 0) {
+        let complexJumps = qt.jumps as Jump[];
+        let simpleJumps: SimpleJump[] = [];
+        for (const jmp of complexJumps) {
+          jmp.conditions.forEach(cnd => {
+            simpleJump.sourceQuestionId = cnd.field;
+            simpleJump.value = cnd.value;
+            simpleJump.targetQuestionId = jmp.destination.id;
+            simpleJumps.push({...simpleJump});
+          });
+        }
+        qt.jumps = simpleJumps;
+      }
+    }));
+    console.log(data.questionnaire.questions);
     cleanData = data.questionnaire;
     return cleanData;
   }
+
+  // resetQuestion(qst: TextQuestion | MultipleChoiceQuestion) : void {
+  //   let textQuestion: TextQuestion;
+  //   let multipleChoiceQuestion: MultipleChoiceQuestion;
+
+  //   switch (qst.question_type) {
+  //     case QuestionType.Text:
+  //       textQuestion = qst as TextQuestion;
+  //       textQuestion.answer = '';
+  //       break;
+  //     case QuestionType.MultipleChoice:
+  //       multipleChoiceQuestion = qst as MultipleChoiceQuestion;
+  //       multipleChoiceQuestion.choices.forEach(ch => ch.selected = false);
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // }
 }
