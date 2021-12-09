@@ -1,11 +1,11 @@
 <form [formGroup]="questionForm">
-  <div *ngIf="!isMultiline">
+  <div *ngIf="!isMultiline" class="text-question">
     <input
       type="text"
       formControlName="userAnswer"
     />
   </div>
-  <div *ngIf="isMultiline">
+  <div *ngIf="isMultiline" class="text-question">
     <textarea
       formControlName="userAnswer">
     </textarea>

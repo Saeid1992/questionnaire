@@ -8,6 +8,7 @@
 .option-container :hover {
   background-color: #004080;
   color: white;
+  cursor: pointer;
 }
 
 label {

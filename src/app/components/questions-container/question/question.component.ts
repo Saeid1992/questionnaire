@@ -1,10 +1,18 @@
 import {
+  trigger,
+  state,
+  style,
+  transition,
+  animate,
+} from '@angular/animations';
+import {
   Component,
   Input,
   OnChanges,
   OnInit,
   SimpleChanges,
 } from '@angular/core';
+import { questionChange } from 'src/app/animations/change-question.animate';
 import { MultipleChoiceQuestion } from 'src/app/models/multiple-choice-question';
 import { Question, QuestionType } from 'src/app/models/question.model';
 import { TextQuestion } from 'src/app/models/text-question.model';
@@ -15,9 +23,36 @@ import { QuestionsService } from 'src/app/services/questions.service';
   selector: 'app-question',
   templateUrl: './question.component.html',
   styleUrls: ['./question.component.css'],
+  animations: [questionChange]
+  // animations: [
+  //   trigger('questionState', [
+  //     state(
+  //       'comingIn',
+  //       style({
+  //         opacity: 0.8,
+  //       })
+  //     ),
+  //     state(
+  //       'goingOut',
+  //       style({
+  //         opacity: 0.3,
+  //       })
+  //     ),
+  //     transition('comingIn => goingOut', animate(1000)),
+  //     transition('goingOut => comingIn', animate(1000)),
+  //   ]),
+  // ],
 })
 export class QuestionComponent implements OnInit, OnChanges {
-  @Input() question: Question;
+  // @Input() question: Question;
+  @Input() set question(question: Question) {
+    this.questionState = 'entering';
+    this._q= question;
+  }
+  get question() { return this._q };
+  _q: Question = {} as Question;
+
+  questionState: 'entering' | 'done' = 'done';
   textQuestion: TextQuestion;
   multipleChoiceQuestion: MultipleChoiceQuestion;
   questionType = QuestionType.Text;
@@ -26,6 +61,7 @@ export class QuestionComponent implements OnInit, OnChanges {
   multipleChoiceQuestionType = '';
   headline = '';
   required = false;
+  // state = 'comingIn';
 
   constructor(
     private globalValuesService: GlobalValuesService,
@@ -65,19 +101,22 @@ export class QuestionComponent implements OnInit, OnChanges {
   }
 
   onSelectionChanged(mcQuestion: MultipleChoiceQuestion) {
-    const answeredQuestionId = this.questionsService.questionsWithAnswers.findIndex(
-      item => item.identifier === mcQuestion.identifier
-    );
+    const answeredQuestionId =
+      this.questionsService.questionsWithAnswers.findIndex(
+        (item) => item.identifier === mcQuestion.identifier
+      );
     this.questionsService.questionsWithAnswers[answeredQuestionId] = mcQuestion;
     console.log(this.questionsService.questionsWithAnswers);
   }
 
   onTextChanged(textQuestion: TextQuestion) {
     console.log(textQuestion);
-    const answeredQuestionId = this.questionsService.questionsWithAnswers.findIndex(
-      item => item.identifier === textQuestion.identifier
-    );
-    this.questionsService.questionsWithAnswers[answeredQuestionId] = textQuestion;
+    const answeredQuestionId =
+      this.questionsService.questionsWithAnswers.findIndex(
+        (item) => item.identifier === textQuestion.identifier
+      );
+    this.questionsService.questionsWithAnswers[answeredQuestionId] =
+      textQuestion;
     console.log(this.questionsService.questionsWithAnswers);
   }
 }

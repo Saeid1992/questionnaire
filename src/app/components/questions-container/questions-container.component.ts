@@ -15,18 +15,6 @@ import { GlobalValuesService } from 'src/app/services/global-values.service';
   selector: 'app-questions-container',
   templateUrl: './questions-container.component.html',
   styleUrls: ['./questions-container.component.css'],
-  animations: [
-    trigger('questionState', [
-      state('comingIn', style({
-        transform: 'translateY(0)'
-      })),
-      state('goingOut', style({
-        transform: 'translateY(-50rem)'
-      })),
-      transition('comingIn => goingOut', animate(500)),
-      transition('goingOut => comingIn', animate(500))
-    ])
-  ]
 })
 export class QuestionsContainerComponent implements OnInit, AfterViewChecked {
   questionnaire: Questionnaire;
@@ -42,7 +30,6 @@ export class QuestionsContainerComponent implements OnInit, AfterViewChecked {
   formerQuestionsIndex: number[] = [];
   previousQuestionSymbol = '<';
   nextQuestionSymbol = '>';
-  state = 'comingIn';
   resultPageUrl = '';
 
   // isValid!: boolean;
@@ -102,7 +89,6 @@ export class QuestionsContainerComponent implements OnInit, AfterViewChecked {
   }
 
   navigateToNextQuestion(currQuestion: TextQuestion | MultipleChoiceQuestion) {
-    this.state = 'goingOut';
     const questionId = currQuestion.identifier;
     let userAnswer = '';
     let index = this.questionsService.questionsWithAnswers.findIndex(

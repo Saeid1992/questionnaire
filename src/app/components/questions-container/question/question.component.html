@@ -1,15 +1,20 @@
-<p>{{ headline }}</p>
-<div>
-  <div *ngIf="questionType === textQuestionType">
-    <app-text-question
-      [textQuestionInfo]="textQuestion"
-      (textChanged)="onTextChanged($event)"
-    ></app-text-question>
-  </div>
-  <div *ngIf="questionType === multipleChoiceQuestionType">
-    <app-multiple-choice-question
-      [multipleChoiceQuestionInfo]="multipleChoiceQuestion"
-      (selectionChanged)="onSelectionChanged($event)"
-    ></app-multiple-choice-question>
+<div
+  [@questionChange]="questionState"
+  (@questionChange.done)="questionState = 'done'"
+>
+  <p class="question-title">{{ headline }}</p>
+  <div>
+    <div *ngIf="questionType === textQuestionType">
+      <app-text-question
+        [textQuestionInfo]="textQuestion"
+        (textChanged)="onTextChanged($event)"
+      ></app-text-question>
+    </div>
+    <div *ngIf="questionType === multipleChoiceQuestionType">
+      <app-multiple-choice-question
+        [multipleChoiceQuestionInfo]="multipleChoiceQuestion"
+        (selectionChanged)="onSelectionChanged($event)"
+      ></app-multiple-choice-question>
+    </div>
   </div>
 </div>
