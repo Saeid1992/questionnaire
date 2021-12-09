@@ -13,6 +13,7 @@ import { TextQuestionComponent } from './components/questions-container/question
 import { MultipleChoiceQuestionComponent } from './components/questions-container/question/multiple-choice-question/multiple-choice-question.component';
 import { QuestionComponent } from './components/questions-container/question/question.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ResultComponent } from './components/result/result.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     QuestionsContainerComponent,
     TextQuestionComponent,
     MultipleChoiceQuestionComponent,
-    QuestionComponent
+    QuestionComponent,
+    ResultComponent
   ],
   imports: [
     BrowserModule,
