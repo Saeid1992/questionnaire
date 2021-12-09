@@ -9,6 +9,7 @@ import { MultipleChoiceQuestion } from 'src/app/models/multiple-choice-question'
 import { TextQuestion } from 'src/app/models/text-question.model';
 import { QuestionType, SimpleJump } from 'src/app/models/question.model';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { GlobalValuesService } from 'src/app/services/global-values.service';
 
 @Component({
   selector: 'app-questions-container',
@@ -29,6 +30,8 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 })
 export class QuestionsContainerComponent implements OnInit, AfterViewChecked {
   questionnaire: Questionnaire;
+  title = '';
+  description = '';
   allQuestions: Array<TextQuestion | MultipleChoiceQuestion>;
   firstQuestionIndex = 0;
   lastQuestionIndex = 0;
@@ -40,12 +43,16 @@ export class QuestionsContainerComponent implements OnInit, AfterViewChecked {
   previousQuestionSymbol = '<';
   nextQuestionSymbol = '>';
   state = 'comingIn';
+  resultPageUrl = '';
+
   // isValid!: boolean;
 
-  constructor(private questionsService: QuestionsService) {
+  constructor(private questionsService: QuestionsService,
+              private globalValuesService: GlobalValuesService) {
     this.questionnaire = {} as Questionnaire;
     this.allQuestions = [];
     this.currentQuestion = {} as TextQuestion; // or as MultipleChoiceQuestion
+    this.resultPageUrl = globalValuesService.RESULT_PAGE;
   }
 
   ngOnInit(): void {
@@ -62,6 +69,8 @@ export class QuestionsContainerComponent implements OnInit, AfterViewChecked {
   getDataFromFile(): void {
     this.questionsService.getAllQuestions().subscribe((data: Questionnaire) => {
       this.questionnaire = data;
+      this.title = data.name;
+      this.description = data.description;
       this.questionsService.questionsWithAnswers = JSON.parse(
         JSON.stringify(this.questionnaire.questions)
       );

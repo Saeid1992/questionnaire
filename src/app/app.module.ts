@@ -15,6 +15,7 @@ import { QuestionComponent } from './components/questions-container/question/que
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ResultComponent } from './components/result/result.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     TextQuestionComponent,
     MultipleChoiceQuestionComponent,
     QuestionComponent,
-    ResultComponent
+    ResultComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,

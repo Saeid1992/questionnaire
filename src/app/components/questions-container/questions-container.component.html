@@ -1,5 +1,4 @@
-<div>Header</div>
-<hr />
+<app-header [questionnaireTitle]="title"></app-header>
 <div class="main-container">
   <div class="question-container">
     <app-question [question]="currentQuestion"></app-question>
@@ -7,13 +6,21 @@
   <div class="button-container">
     <button
       [disabled]="isFirstQuestion"
-      (click)="navigateToPreviousQuestion(currentQuestion)">
-      {{previousQuestionSymbol}}
+      (click)="navigateToPreviousQuestion(currentQuestion)"
+    >
+      {{ previousQuestionSymbol }}
     </button>
     <button
       [disabled]="isLastQuestion"
-      (click)="navigateToNextQuestion(currentQuestion)">
-      {{nextQuestionSymbol}}
+      (click)="navigateToNextQuestion(currentQuestion)"
+    >
+      {{ nextQuestionSymbol }}
     </button>
   </div>
+</div>
+<div *ngIf="isLastQuestion" class="result-button-container">
+  <button [routerLink]="resultPageUrl">Your answers</button>
+</div>
+<div class="description-container">
+  <p>{{ description }}</p>
 </div>

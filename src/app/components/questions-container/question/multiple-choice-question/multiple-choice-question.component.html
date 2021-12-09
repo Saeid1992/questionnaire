@@ -1,11 +1,24 @@
-<form [formGroup]="questionForm">
-  <div *ngFor="let choice of initialChoices" class="option-container">
-    <label>
-      <input type="radio"
-             formControlName="choice"
-             [value]="choice.value" />
-      {{ choice.label }}
-    </label>
-    <div></div>
+<form [formGroup]="questionFormSingleAnswer">
+  <div *ngIf="isMultipleAnswerAllowed">
+    <div *ngFor="let choice of initialChoices" class="option-container">
+      <label>
+        <input
+          type="checkbox"
+          formControlName="choice"
+          [checked]="false"
+        />
+        {{ choice.label }}
+      </label>
+    </div>
+  </div>
+  <div *ngIf="!isMultipleAnswerAllowed">
+    <div *ngFor="let choice of initialChoices" class="option-container">
+      <label>
+        <input type="radio"
+               formControlName="choice"
+               [value]="choice.value" />
+        {{ choice.label }}
+      </label>
+    </div>
   </div>
 </form>

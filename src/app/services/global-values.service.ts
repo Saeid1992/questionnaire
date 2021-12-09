@@ -7,6 +7,7 @@ import { TextQuestion } from "../models/text-question.model";
 export class GlobalValuesService {
 
     MAIN_PAGE = '/questions-container';
+    RESULT_PAGE = '/result';
     BASE_URL = '/assets/data';
     GET_ALL_QUESTIONS = '/questionnaire.json';
 

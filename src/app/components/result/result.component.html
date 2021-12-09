@@ -1,1 +1,5 @@
-<p>result works!</p>
+<app-header [questionnaireTitle]="'Text'"></app-header>
+<div *ngFor="let result of cleanResult">
+  <p>{{result[1]}}</p>
+  <p>{{result[2]}}</p>
+</div>
