@@ -32,16 +32,16 @@ export class ResultComponent implements OnInit {
     for (const questionItem of this.finalResult) {
       questionId = questionItem.identifier;
       questionTitle = questionItem.headline;
+      skippedQuestionsIds = [];
       switch (questionItem.question_type) {
         case QuestionType.Text:
           textQuestion = questionItem as TextQuestion;
-          userAnswer = textQuestion.answer ?? 'NO ANSWER';
+          userAnswer = textQuestion.answer?? '';
           break;
         case QuestionType.MultipleChoice:
           multipleChoiceQuestion = questionItem as MultipleChoiceQuestion;
           userAnswer =
-            multipleChoiceQuestion.choices.find((ch) => ch.selected)?.value ??
-            'NO ANSWER';
+            multipleChoiceQuestion.choices.find((ch) => ch.selected)?.value?? '';
           break;
       }
       if (questionItem.jumps.length > 0) {
@@ -52,9 +52,9 @@ export class ResultComponent implements OnInit {
             skippedQuestionsIds.push(undoneJump.targetQuestionId)
           );
       }
-    }
-    if (!skippedQuestionsIds.includes(questionId)) {
-      this.cleanResult.push([questionId, questionTitle, userAnswer]);
+      if (!skippedQuestionsIds.includes(questionId)) {
+        this.cleanResult.push([questionId, questionTitle, userAnswer]);
+      }
     }
   }
 }

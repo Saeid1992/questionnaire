@@ -16,6 +16,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ResultComponent } from './components/result/result.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderComponent } from './components/header/header.component';
+import { DisplayFinalAnswerPipe } from './pipes/final-answers.pipe';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,9 @@ import { HeaderComponent } from './components/header/header.component';
     MultipleChoiceQuestionComponent,
     QuestionComponent,
     ResultComponent,
-    HeaderComponent
+    HeaderComponent,
+
+    DisplayFinalAnswerPipe
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,7 @@
 <app-header [questionnaireTitle]="'Text'"></app-header>
 <div *ngFor="let result of cleanResult" class="result-container">
-  <p class="question">{{result[1]}}</p>
-  <p class="answer">{{result[2]}}</p>
+  <p class="question">{{ result[1] }}</p>
+  <p [ngClass]="result[2] ? 'hasAnswer' : 'hasNotAnswer'">
+    {{ result[2] | displayAnswer }}
+  </p>
 </div>

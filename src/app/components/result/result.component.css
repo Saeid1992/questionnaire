@@ -7,8 +7,13 @@
 }
 
 .question {
+  text-align: center;
 }
 
-.answer {
-  color: purple;
+.hasNotAnswer {
+  color: red;
+}
+
+.hasAnswer {
+  color: greenyellow;
 }
