@@ -1,6 +1,5 @@
 import {
   AfterViewChecked,
-  ChangeDetectionStrategy,
   Component,
   OnInit,
 } from '@angular/core';
@@ -8,12 +7,25 @@ import { QuestionsService } from 'src/app/services/questions.service';
 import { Questionnaire } from 'src/app/models/questionnaire.model';
 import { MultipleChoiceQuestion } from 'src/app/models/multiple-choice-question';
 import { TextQuestion } from 'src/app/models/text-question.model';
-import { Jump, QuestionType, SimpleJump } from 'src/app/models/question.model';
+import { QuestionType, SimpleJump } from 'src/app/models/question.model';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-questions-container',
   templateUrl: './questions-container.component.html',
   styleUrls: ['./questions-container.component.css'],
+  animations: [
+    trigger('questionState', [
+      state('comingIn', style({
+        transform: 'translateY(0)'
+      })),
+      state('goingOut', style({
+        transform: 'translateY(-50rem)'
+      })),
+      transition('comingIn => goingOut', animate(500)),
+      transition('goingOut => comingIn', animate(500))
+    ])
+  ]
 })
 export class QuestionsContainerComponent implements OnInit, AfterViewChecked {
   questionnaire: Questionnaire;
@@ -25,6 +37,9 @@ export class QuestionsContainerComponent implements OnInit, AfterViewChecked {
   isFirstQuestion = true;
   isLastQuestion = false;
   formerQuestionsIndex: number[] = [];
+  previousQuestionSymbol = '<';
+  nextQuestionSymbol = '>';
+  state = 'comingIn';
   // isValid!: boolean;
 
   constructor(private questionsService: QuestionsService) {
@@ -78,6 +93,7 @@ export class QuestionsContainerComponent implements OnInit, AfterViewChecked {
   }
 
   navigateToNextQuestion(currQuestion: TextQuestion | MultipleChoiceQuestion) {
+    this.state = 'goingOut';
     const questionId = currQuestion.identifier;
     let userAnswer = '';
     let index = this.questionsService.questionsWithAnswers.findIndex(

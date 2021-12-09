@@ -1,0 +1,18 @@
+.option-container {
+  margin: 0.5rem;
+  border: 1px solid #004080;
+  border-radius: 5%;
+  background-color: #80bfff;
+}
+
+.option-container :hover {
+  background-color: #004080;
+  color: white;
+}
+
+label {
+  display: block;
+  padding: 1rem;
+  height: 10%;
+}
+

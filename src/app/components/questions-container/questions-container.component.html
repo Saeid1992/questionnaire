@@ -1,13 +1,19 @@
 <div>Header</div>
 <hr />
-<app-question [question]="currentQuestion"></app-question>
-<button
-  [disabled]="isFirstQuestion"
-  (click)="navigateToPreviousQuestion(currentQuestion)">
-  Previous
-</button>
-<button
-  [disabled]="isLastQuestion"
-  (click)="navigateToNextQuestion(currentQuestion)">
-  Next
-</button>
+<div class="main-container">
+  <div class="question-container">
+    <app-question [question]="currentQuestion"></app-question>
+  </div>
+  <div class="button-container">
+    <button
+      [disabled]="isFirstQuestion"
+      (click)="navigateToPreviousQuestion(currentQuestion)">
+      {{previousQuestionSymbol}}
+    </button>
+    <button
+      [disabled]="isLastQuestion"
+      (click)="navigateToNextQuestion(currentQuestion)">
+      {{nextQuestionSymbol}}
+    </button>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+.main-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.question-container {
+  width: 20rem;
+}
+
+button {
+  background-color: #004080;
+  border: 1px solid white;
+  color: white;
+  padding: 1rem 2rem;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1rem;
+  transition-duration: 250ms;
+  cursor: pointer;
+}
+
+button:hover {
+  color: #004080;
+  background-color: white;
+}
+
+button:disabled {
+  background-color: gray;
+  color: black;
+  cursor: not-allowed;
+}
+
+button:focus {
+  outline: none;
+}
+
+/* .button-container {
+  align-self: flex-end;
+} */

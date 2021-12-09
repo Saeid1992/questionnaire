@@ -14,6 +14,7 @@ import { MultipleChoiceQuestionComponent } from './components/questions-containe
 import { QuestionComponent } from './components/questions-container/question/question.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ResultComponent } from './components/result/result.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { ResultComponent } from './components/result/result.component';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,

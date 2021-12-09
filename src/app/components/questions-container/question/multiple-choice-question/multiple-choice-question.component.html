@@ -1,10 +1,11 @@
 <form [formGroup]="questionForm">
-  <div *ngFor="let choice of initialChoices">
+  <div *ngFor="let choice of initialChoices" class="option-container">
     <label>
       <input type="radio"
              formControlName="choice"
-             [value]="choice.value"/>
-             {{choice.label}}
+             [value]="choice.value" />
+      {{ choice.label }}
     </label>
+    <div></div>
   </div>
 </form>
