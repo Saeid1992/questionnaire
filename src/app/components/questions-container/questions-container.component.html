@@ -1,4 +1,4 @@
-<app-header [questionnaireTitle]="title"></app-header>
+<app-header></app-header>
 <div class="main-container">
   <div class="question-container">
     <app-question [question]="currentQuestion"></app-question>
@@ -18,9 +18,11 @@
     </button>
   </div>
 </div>
+<br>
 <div *ngIf="isLastQuestion" class="result-button-container">
   <button [routerLink]="resultPageUrl">Your answers</button>
 </div>
 <div class="description-container">
   <p>{{ description }}</p>
 </div>
+<app-footer></app-footer>

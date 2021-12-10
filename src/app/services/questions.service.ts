@@ -17,6 +17,7 @@ export class QuestionsService {
   url = '';
   apiName = '';
   questionsWithAnswers: Array<TextQuestion | MultipleChoiceQuestion>;
+  questionnaireTitle = '';
   isValid = new EventEmitter<boolean>();
 
   constructor(
@@ -36,11 +37,12 @@ export class QuestionsService {
     return this.http
       .get<QuestionnaireBase>(this.url + this.apiName)
       .pipe(
-        map(baseQuestionnaire => this.cleanInputData(baseQuestionnaire))
+        map(baseQuestionnaire => this.provideCleanData(baseQuestionnaire))
       );
   }
 
-  cleanInputData(data: QuestionnaireBase): Questionnaire {
+  provideCleanData(data: QuestionnaireBase): Questionnaire {
+    this.questionnaireTitle = data.questionnaire.name;
     let cleanData: Questionnaire;
     let textQuestion: TextQuestion;
     let multipleChoiceQuestion: MultipleChoiceQuestion;

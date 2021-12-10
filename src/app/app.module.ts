@@ -17,6 +17,7 @@ import { ResultComponent } from './components/result/result.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderComponent } from './components/header/header.component';
 import { DisplayFinalAnswerPipe } from './pipes/final-answers.pipe';
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { DisplayFinalAnswerPipe } from './pipes/final-answers.pipe';
     ResultComponent,
     HeaderComponent,
 
-    DisplayFinalAnswerPipe
+    DisplayFinalAnswerPipe,
+     FooterComponent
   ],
   imports: [
     BrowserModule,
