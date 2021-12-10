@@ -37,5 +37,7 @@ export class GlobalValuesService {
         multiple: '',
     }
 
+    MULTI_ANSWER_CONNECTOR = ' UND '
+
     constructor() {}
 }

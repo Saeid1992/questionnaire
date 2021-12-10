@@ -5,6 +5,12 @@
   align-items: center;
 }
 
+#progress-bar {
+  height: 1rem;
+  transition-duration: 500ms;
+
+}
+
 .question-container {
   width: 20rem;
   min-height: 27rem;

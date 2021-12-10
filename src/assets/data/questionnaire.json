@@ -10,7 +10,7 @@
         "headline": "Wen möchtest Du versichern?",
         "description": null,
         "required": false,
-        "multiple": "true",
+        "multiple": "false",
         "choices": [
           {
             "label": "Meine Familie mit Kindern",
@@ -46,7 +46,7 @@
         "headline": "Bist Du Beamter oder im öffentlichen Dienst angestellt?",
         "description": null,
         "required": false,
-        "multiple": "true",
+        "multiple": "false",
         "choices": [
           {
             "label": "Ja",

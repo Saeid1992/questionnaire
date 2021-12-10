@@ -31,6 +31,8 @@ export class QuestionsContainerComponent implements OnInit, AfterViewChecked {
   previousQuestionSymbol = '<';
   nextQuestionSymbol = '>';
   resultPageUrl = '';
+  passedQuestions = 0;
+  totalQuestions = 0;
 
   // isValid!: boolean;
 
@@ -61,8 +63,9 @@ export class QuestionsContainerComponent implements OnInit, AfterViewChecked {
       this.questionsService.questionsWithAnswers = JSON.parse(
         JSON.stringify(this.questionnaire.questions)
       );
+      this.totalQuestions = this.questionsService.questionsWithAnswers.length;
       this.lastQuestionIndex =
-        this.questionsService.questionsWithAnswers.length - 1;
+        this.totalQuestions - 1;
       this.startQuestionnaire();
     });
   }
@@ -89,7 +92,7 @@ export class QuestionsContainerComponent implements OnInit, AfterViewChecked {
       skippedQuestions = this.questionsService.questionsWithAnswers.slice(previousQuestionRealIndex + 1, index);
       skippedQuestions.forEach(sq => sq.skipped = false);
     }
-
+    this.passedQuestions = previousQuestionRealIndex;
     this.currentQuestion =
       this.questionsService.questionsWithAnswers[previousQuestionRealIndex];
     this.isLastQuestion = false;
@@ -120,6 +123,7 @@ export class QuestionsContainerComponent implements OnInit, AfterViewChecked {
         skippedQuestions.forEach(sq => sq.skipped = true);
       }
     }
+    this.passedQuestions = nextQuestionRealIndex;
     this.currentQuestion =
       this.questionsService.questionsWithAnswers[nextQuestionRealIndex];
     this.isFirstQuestion = false;

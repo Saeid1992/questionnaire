@@ -1,5 +1,13 @@
 <app-header></app-header>
 <div class="main-container">
+  <!-- <div class="progress-bar-container">
+    <label for="progress-bar">Progress:</label>
+    <progress
+      id="progress-bar"
+      [value]="passedQuestions"
+      [max]="totalQuestions"
+    ></progress>
+  </div> -->
   <div class="question-container">
     <app-question [question]="currentQuestion"></app-question>
   </div>

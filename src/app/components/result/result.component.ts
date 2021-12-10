@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { MultipleChoiceQuestion } from 'src/app/models/multiple-choice-question';
+import {
+  Choice,
+  MultipleChoiceQuestion,
+} from 'src/app/models/multiple-choice-question';
 import { QuestionType, SimpleJump } from 'src/app/models/question.model';
 import { TextQuestion } from 'src/app/models/text-question.model';
+import { GlobalValuesService } from 'src/app/services/global-values.service';
 import { QuestionsService } from 'src/app/services/questions.service';
 
 @Component({
@@ -12,10 +16,13 @@ import { QuestionsService } from 'src/app/services/questions.service';
 export class ResultComponent implements OnInit {
   finalResult: Array<TextQuestion | MultipleChoiceQuestion>;
   cleanResult: [string, string, string][];
-
-  constructor(private questionsService: QuestionsService) {
+  answerConnector = '';
+  multipleAnswers : string[] = [];
+  constructor(private questionsService: QuestionsService,
+              private globalValuesService: GlobalValuesService) {
     this.finalResult = this.questionsService.questionsWithAnswers;
     this.cleanResult = [];
+    this.answerConnector = this.globalValuesService.MULTI_ANSWER_CONNECTOR;
     this.prepareResult();
   }
 
@@ -25,6 +32,7 @@ export class ResultComponent implements OnInit {
     let questionId = '';
     let questionTitle = '';
     let userAnswer = '';
+    let selectedOptions: Choice[] = [];
     let textQuestion: TextQuestion;
     let multipleChoiceQuestion: MultipleChoiceQuestion;
 
@@ -34,12 +42,24 @@ export class ResultComponent implements OnInit {
       switch (questionItem.question_type) {
         case QuestionType.Text:
           textQuestion = questionItem as TextQuestion;
-          userAnswer = textQuestion.answer?? '';
+          userAnswer = textQuestion.answer ?? '';
           break;
         case QuestionType.MultipleChoice:
           multipleChoiceQuestion = questionItem as MultipleChoiceQuestion;
-          userAnswer =
-            multipleChoiceQuestion.choices.find((ch) => ch.selected)?.value?? '';
+          if (multipleChoiceQuestion.multiple) {
+            this.multipleAnswers = [];
+            selectedOptions = multipleChoiceQuestion.choices.filter(
+              (ch) => ch.selected
+            );
+            if(selectedOptions.length > 0) {
+              selectedOptions.forEach(opt => this.multipleAnswers.push(opt.value));
+              userAnswer = this.multipleAnswers.join(this.answerConnector);
+            }
+          } else {
+            userAnswer =
+              multipleChoiceQuestion.choices.find((ch) => ch.selected)?.value ??
+              '';
+          }
           break;
       }
       if (!questionItem.skipped) {
