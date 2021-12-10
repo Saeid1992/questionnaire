@@ -6,6 +6,7 @@ import {
   OnInit,
   Output,
   SimpleChanges,
+  ɵresetJitOptions,
 } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import {
@@ -29,23 +30,32 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
   initialChoices: Choice[] = [];
   selectedItemIndex: number;
   isMultipleAnswerAllowed = false;
-  questionFormSingleAnswer: FormGroup;
-  questionFormMultipleAnswer: FormArray;
+  questionFormSingle: FormGroup;
+  questionFormContainer: FormGroup;
+  questionFormMultiple :FormGroup;
+  get options(): FormArray {
+    return this.questionFormContainer.get('options') as FormArray;
+  }
+  // questionFormMultipleAnswer: FormArray;
 
-  constructor(private globalValuesService: GlobalValuesService,
-              private questionsService: QuestionsService) {
+  constructor(
+    private globalValuesService: GlobalValuesService,
+    private questionsService: QuestionsService
+  ) {
     // Deep copy
     this.multipleChoiceQuestionInfo = JSON.parse(
       JSON.stringify(this.globalValuesService.DEFAULT_MULTIPLE_CHOICE_QUESTION)
     );
     this.currentMultipleChoiceQuestion = this.multipleChoiceQuestionInfo;
-    this.questionFormSingleAnswer = new FormGroup({});
-    this.questionFormMultipleAnswer = new FormArray([]);
+    this.questionFormSingle = new FormGroup({});
+    this.questionFormContainer = new FormGroup({});
+    this.questionFormMultiple = new FormGroup({});
+    // this.questionFormMultipleAnswer = new FormArray([]);
     this.selectedItemIndex = -1;
   }
 
   ngOnInit(): void {
-    this.questionFormSingleAnswer.valueChanges.subscribe((formValue) => {
+    this.questionFormSingle.valueChanges.subscribe((formValue) => {
       console.log(formValue);
       this.resetFormValue();
       this.currentMultipleChoiceQuestion.choices = this.initialChoices;
@@ -61,6 +71,15 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
         // this.questionsService.isValid.emit(this.questionForm.valid);
       }
     });
+
+    this.questionFormMultiple.valueChanges.subscribe((formValue) => {
+      console.log(formValue);
+      this.currentMultipleChoiceQuestion.choices = this.initialChoices;
+      this.currentMultipleChoiceQuestion.choices.forEach((ch) => {
+        ch.selected = formValue[ch.label];
+      });
+      this.selectionChanged.emit(this.currentMultipleChoiceQuestion);
+    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -69,7 +88,7 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
       changes.multipleChoiceQuestionInfo.currentValue;
     this.assignQuestion(this.currentMultipleChoiceQuestion);
     this.updateValidators(this.currentMultipleChoiceQuestion);
-    console.log(this.questionFormSingleAnswer.valid);
+    console.log(this.questionFormSingle.valid);
     // this.questionsService.isValid.emit(this.questionForm.valid);
   }
 
@@ -78,20 +97,38 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
     this.isMultipleAnswerAllowed = question.multiple as boolean;
     this.initialChoices = JSON.parse(JSON.stringify(question.choices));
     previousAnswer = this.initialChoices.find((ch) => ch.selected);
-    this.questionFormSingleAnswer.setControl(
-      'choice',
-      new FormControl(this.initialChoices)
-    );
-    if (previousAnswer) {
-      this.questionFormSingleAnswer.setValue({ choice: previousAnswer.value });
+    console.log(this.questionFormSingle);
+    switch (this.isMultipleAnswerAllowed) {
+      case true:
+        this.questionFormContainer.setControl('options', new FormArray([]));
+        for (let i = 0; i < this.initialChoices.length; i++) {
+          this.questionFormMultiple.setControl(
+            this.initialChoices[i].label,
+            new FormControl(this.initialChoices[i].selected)
+          );
+        }
+        console.log(this.questionFormMultiple);
+        this.options.push(this.questionFormMultiple);
+        break;
+      case false:
+        this.questionFormSingle.setControl(
+          'choice',
+          new FormControl(this.initialChoices)
+        );
+        if (previousAnswer) {
+          this.questionFormSingle.setValue({
+            choice: previousAnswer.value,
+          });
+        }
+        break;
     }
   }
 
   updateValidators(question: MultipleChoiceQuestion): void {
     if (question.required) {
       // this.questionForm.setValidators();
-      this.questionFormSingleAnswer.updateValueAndValidity();
-      this.questionsService.isValid.emit(this.questionFormSingleAnswer.valid);
+      this.questionFormSingle.updateValueAndValidity();
+      this.questionsService.isValid.emit(this.questionFormSingle.valid);
     }
   }
 
