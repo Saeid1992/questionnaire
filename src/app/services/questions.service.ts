@@ -47,6 +47,7 @@ export class QuestionsService {
     let simpleJump: SimpleJump = {sourceQuestionId:'', value: '', targetQuestionId:''};
 
     for (const question of data.questionnaire.questions) {
+      question.skipped = false;
       switch (question.question_type) {
         case QuestionType.Text:
           textQuestion = question as TextQuestion;

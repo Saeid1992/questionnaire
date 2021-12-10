@@ -79,12 +79,19 @@ export class QuestionsContainerComponent implements OnInit, AfterViewChecked {
     let index = this.questionsService.questionsWithAnswers.findIndex(
       (question) => question.identifier === currQuestion.identifier
     );
-    let previousQuestionIndex = this.formerQuestionsIndex.pop() as number;
+    let previousQuestionProbableIndex = index - 1;
+    let previousQuestionRealIndex = this.formerQuestionsIndex.pop() as number;
     if (index === 1) {
       this.isFirstQuestion = true;
     }
+    if(previousQuestionRealIndex !== previousQuestionProbableIndex) {
+      let skippedQuestions: Array<TextQuestion | MultipleChoiceQuestion> = [];
+      skippedQuestions = this.questionsService.questionsWithAnswers.slice(previousQuestionRealIndex + 1, index);
+      skippedQuestions.forEach(sq => sq.skipped = false);
+    }
+
     this.currentQuestion =
-      this.questionsService.questionsWithAnswers[previousQuestionIndex];
+      this.questionsService.questionsWithAnswers[previousQuestionRealIndex];
     this.isLastQuestion = false;
   }
 
@@ -95,19 +102,26 @@ export class QuestionsContainerComponent implements OnInit, AfterViewChecked {
       (question) => question.identifier === questionId
     );
     this.formerQuestionsIndex.push(index);
-    let nextQuestionIndex = index + 1;
+    let nextQuestionProbableIndex = index + 1;
+    let nextQuestionRealIndex = nextQuestionProbableIndex;
     if (index === this.lastQuestionIndex - 1) {
       this.isLastQuestion = true;
     }
     if (currQuestion.jumps.length > 0) {
+      let skippedQuestions: Array<TextQuestion | MultipleChoiceQuestion> = [];
       userAnswer = this.findUserAnswer(currQuestion);
       const nextQuestionId = this.findNextQuestionId(currQuestion, userAnswer);
-      nextQuestionIndex = this.questionsService.questionsWithAnswers.findIndex(
+      nextQuestionRealIndex = this.questionsService.questionsWithAnswers.findIndex(
         (item) => item.identifier === nextQuestionId
       );
+
+      if(nextQuestionProbableIndex !== nextQuestionRealIndex) {
+        skippedQuestions = this.questionsService.questionsWithAnswers.slice(nextQuestionProbableIndex, nextQuestionRealIndex); // slice performs a shallow copy
+        skippedQuestions.forEach(sq => sq.skipped = true);
+      }
     }
     this.currentQuestion =
-      this.questionsService.questionsWithAnswers[nextQuestionIndex];
+      this.questionsService.questionsWithAnswers[nextQuestionRealIndex];
     this.isFirstQuestion = false;
   }
 

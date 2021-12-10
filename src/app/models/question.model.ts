@@ -5,6 +5,7 @@ export interface Question {
     description: string | null;
     required: boolean;
     jumps: Jump[] | SimpleJump[];
+    skipped?: boolean;
 }
 
 export enum QuestionType{

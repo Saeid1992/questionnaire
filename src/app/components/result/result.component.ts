@@ -25,14 +25,12 @@ export class ResultComponent implements OnInit {
     let questionId = '';
     let questionTitle = '';
     let userAnswer = '';
-    let skippedQuestionsIds: string[] = [];
     let textQuestion: TextQuestion;
     let multipleChoiceQuestion: MultipleChoiceQuestion;
 
     for (const questionItem of this.finalResult) {
       questionId = questionItem.identifier;
       questionTitle = questionItem.headline;
-      skippedQuestionsIds = [];
       switch (questionItem.question_type) {
         case QuestionType.Text:
           textQuestion = questionItem as TextQuestion;
@@ -44,15 +42,7 @@ export class ResultComponent implements OnInit {
             multipleChoiceQuestion.choices.find((ch) => ch.selected)?.value?? '';
           break;
       }
-      if (questionItem.jumps.length > 0) {
-        let simpleJumps = questionItem.jumps as SimpleJump[];
-        simpleJumps
-          .filter((jmp) => jmp.value !== userAnswer)
-          .forEach((undoneJump) =>
-            skippedQuestionsIds.push(undoneJump.targetQuestionId)
-          );
-      }
-      if (!skippedQuestionsIds.includes(questionId)) {
+      if (!questionItem.skipped) {
         this.cleanResult.push([questionId, questionTitle, userAnswer]);
       }
     }
