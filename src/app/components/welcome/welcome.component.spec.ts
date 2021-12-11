@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { GlobalValuesService } from 'src/app/services/global-values.service';
 
 import { WelcomeComponent } from './welcome.component';
 
@@ -8,7 +9,8 @@ describe('WelcomeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WelcomeComponent ]
+      declarations: [ WelcomeComponent ],
+      providers: [GlobalValuesService]
     })
     .compileComponents();
   });

@@ -1,4 +1,8 @@
+import { HttpClient, HttpHandler } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ApiService } from 'src/app/services/api-service';
+import { GlobalValuesService } from 'src/app/services/global-values.service';
+import { QuestionsService } from 'src/app/services/questions.service';
 
 import { TextQuestionComponent } from './text-question.component';
 
@@ -8,7 +12,8 @@ describe('TextQuestionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TextQuestionComponent ]
+      declarations: [ TextQuestionComponent ],
+      providers: [GlobalValuesService, QuestionsService, ApiService, HttpClient, HttpHandler]
     })
     .compileComponents();
   });

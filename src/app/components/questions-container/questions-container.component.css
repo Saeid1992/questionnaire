@@ -1,8 +1,12 @@
+.header {
+  height: 10%;
+}
 .main-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  height:80%;
 }
 
 #progress-bar {
@@ -13,7 +17,11 @@
 
 .question-container {
   width: 25rem;
-  min-height: 27rem;
+  height: 70%;
+}
+
+.button-container {
+  height: 15%;
 }
 
 button {
@@ -56,7 +64,8 @@ button:focus {
 
 .description-container {
   text-align: center;
-  margin-top: 2rem;
+  /* margin-top: 2rem; */
   padding: 1rem;
   border: 1px solid black;
+  height: 15%;
 }

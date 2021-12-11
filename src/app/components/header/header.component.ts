@@ -7,9 +7,8 @@ import { QuestionsService } from 'src/app/services/questions.service';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  title: string;
+  @Input() titleOfQuestionnaire : string = '';
   constructor(private questionsService: QuestionsService) {
-    this.title = questionsService.questionnaireTitle;
    }
 
   ngOnInit(): void {

@@ -1,4 +1,4 @@
-<app-header></app-header>
+<app-header [titleOfQuestionnaire]="title" class="header"></app-header>
 <div class="main-container">
   <!-- <div class="progress-bar-container">
     <label for="progress-bar">Progress:</label>
@@ -25,12 +25,12 @@
       {{ nextQuestionSymbol }}
     </button>
   </div>
-</div>
-<br />
-<div *ngIf="isLastQuestion" class="result-button-container">
-  <button (click)="navigateToResultPage()">See result</button>
-</div>
-<div class="description-container">
-  <p>{{ description }}</p>
+  <br />
+  <div *ngIf="isLastQuestion" class="result-button-container">
+    <button (click)="navigateToResultPage()">See result</button>
+  </div>
+  <div class="description-container">
+    <p>{{ description }}</p>
+  </div>
 </div>
 <!-- <app-footer></app-footer> -->

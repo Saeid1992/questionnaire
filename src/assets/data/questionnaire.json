@@ -45,7 +45,7 @@
         "identifier": "list_12111610",
         "headline": "Bist Du Beamter oder im öffentlichen Dienst angestellt?",
         "description": null,
-        "required": false,
+        "required": true,
         "multiple": "false",
         "choices": [
           {

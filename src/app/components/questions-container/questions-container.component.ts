@@ -1,6 +1,7 @@
 import {
   AfterViewChecked,
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   OnChanges,
   OnInit,
@@ -62,7 +63,7 @@ export class QuestionsContainerComponent implements OnInit, AfterViewInit {
   getDataFromFile(): void {
     this.questionsService.getAllQuestions().subscribe((data: Questionnaire) => {
       this.questionnaire = data;
-      this.title = data.name;
+      this.title = this.questionsService.questionnaireTitle;
       this.description = data.description;
       this.questionsService.questionsWithAnswers = JSON.parse(
         JSON.stringify(this.questionnaire.questions)

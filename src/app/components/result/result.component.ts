@@ -15,6 +15,7 @@ import { QuestionsService } from 'src/app/services/questions.service';
   styleUrls: ['./result.component.css'],
 })
 export class ResultComponent implements OnInit {
+  title = '';
   finalResult: Array<TextQuestion | MultipleChoiceQuestion>;
   cleanResult: [string, string, string][];
   answerConnector = '';
@@ -27,7 +28,7 @@ export class ResultComponent implements OnInit {
     //   console.log('asdas');
     //   this.router.navigateByUrl('');
     // }
-
+    this.title = this.questionsService.questionnaireTitle;
     this.finalResult = this.questionsService.questionsWithAnswers;
     this.cleanResult = [];
     this.answerConnector = this.globalValuesService.MULTI_ANSWER_CONNECTOR;
