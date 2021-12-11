@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import {
   Choice,
   MultipleChoiceQuestion,
@@ -19,7 +20,14 @@ export class ResultComponent implements OnInit {
   answerConnector = '';
   multipleAnswers : string[] = [];
   constructor(private questionsService: QuestionsService,
-              private globalValuesService: GlobalValuesService) {
+              private globalValuesService: GlobalValuesService,
+              private router: Router) {
+
+    // if(!this.router.getCurrentNavigation()) {
+    //   console.log('asdas');
+    //   this.router.navigateByUrl('');
+    // }
+
     this.finalResult = this.questionsService.questionsWithAnswers;
     this.cleanResult = [];
     this.answerConnector = this.globalValuesService.MULTI_ANSWER_CONNECTOR;

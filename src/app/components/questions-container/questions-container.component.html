@@ -19,7 +19,7 @@
       {{ previousQuestionSymbol }}
     </button>
     <button
-      [disabled]="isLastQuestion"
+      [disabled]="isLastQuestion || !isValid"
       (click)="navigateToNextQuestion(currentQuestion)"
     >
       {{ nextQuestionSymbol }}
@@ -28,7 +28,7 @@
 </div>
 <br />
 <div *ngIf="isLastQuestion" class="result-button-container">
-  <button [routerLink]="resultPageUrl">Your answers</button>
+  <button (click)="navigateToResultPage()">See result</button>
 </div>
 <div class="description-container">
   <p>{{ description }}</p>

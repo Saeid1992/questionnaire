@@ -11,6 +11,6 @@ export const questionChange: AnimationTriggerMetadata = trigger('questionChange'
     style({
       opacity: 1,
     }),
-    animate('500ms ease', style({ opacity: 0.4 })),
+    animate('500ms', style({ opacity: 0.0 })),
   ]),
 ]);

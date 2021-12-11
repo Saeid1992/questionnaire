@@ -9,7 +9,7 @@
         "identifier": "list_12110962",
         "headline": "Wen möchtest Du versichern?",
         "description": null,
-        "required": false,
+        "required": true,
         "multiple": "false",
         "choices": [
           {

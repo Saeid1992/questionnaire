@@ -1,4 +1,4 @@
-import { AbstractControl, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
+import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 import { Choice } from '../models/multiple-choice-question';
 
 // export function ValidateMultipleChoiceQuestion(control: FormControl): {
@@ -14,9 +14,9 @@ import { Choice } from '../models/multiple-choice-question';
 export function ValidateMultipleChoiceQuestion(): ValidatorFn {
   return (control: AbstractControl) => {
     console.log(control);
-    const choices = control.value.choice as Choice[];
-    console.log(choices);
-    if (choices.some(ch => ch.selected)) {
+    const choice = control.value.choice as Choice;
+    console.log(choice);
+    if (choice) {
       return null;
     }
     return { errorMessage: 'Required!' };

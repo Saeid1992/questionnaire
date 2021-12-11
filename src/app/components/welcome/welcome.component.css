@@ -1,0 +1,59 @@
+.welcome-main-container {
+  width: 100%;
+  height: 100%;
+}
+.welcome-message-container {
+  width: 100%;
+  height: 10%;
+}
+
+.welcome-message-container p {
+  text-align: center;
+  font-size: 1.2rem;
+  margin: 0;
+  padding: 2rem;
+  animation-name: message;
+  animation-duration: 5000ms;
+  animation-fill-mode: forwards;
+}
+
+@media (min-width: 45rem) {
+  .welcome-message-container p {
+    text-align: center;
+    font-size: 2rem;
+  }
+}
+
+@keyframes message {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+.start-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 70%;
+}
+button {
+  width: 20rem;
+  height: 10rem;
+  font-size: 4rem;
+  font-weight: bold;
+  border: 5px solid white;
+  border-radius: 50%;
+  background-color: blue;
+  color: white;
+  cursor: pointer;
+  position: relative;
+  animation-name: welcome-page-animation;
+  animation-duration: 3000ms;
+  animation-fill-mode: forwards;
+}
+
+@keyframes welcome-page-animation {
+  0% {bottom: -50%; font-family: 'Comfortaa';}
+  50% {background-color: white; color: blue; border-color: blue;}
+  100%{bottom: 0;  font-family: 'Comfortaa';}
+}

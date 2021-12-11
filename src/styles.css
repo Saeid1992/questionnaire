@@ -1,11 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
+@font-face {
+  font-family: 'Comfortaa';
+  src: url('/assets/fonts/comfortaa-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Comfortaa';
+  src: url('/assets/fonts/comfortaa-Bold.ttf') format('truetype');
+  font-weight: 700;
+}
+
+
 html,
 body {
   height: 100%;
+  font-family:'Comfortaa';
 }
 body {
   margin: 0;
-  font-family: CeraRoundPro-Regular,sans-serif;
   box-sizing: border-box;
-  background-color: #e6f2ff;
+  background-image: linear-gradient(#ffffff , #80bfff );
+  background-position: center;
 }
+

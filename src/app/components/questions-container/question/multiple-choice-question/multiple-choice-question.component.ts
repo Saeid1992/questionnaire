@@ -50,7 +50,6 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
     this.questionFormSingle = new FormGroup({});
     this.questionFormContainer = new FormGroup({});
     this.questionFormMultiple = new FormGroup({});
-    // this.questionFormMultipleAnswer = new FormArray([]);
     this.selectedItemIndex = -1;
   }
 
@@ -68,7 +67,7 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
           this.selectedItemIndex
         ].selected = true;
         this.selectionChanged.emit(this.currentMultipleChoiceQuestion);
-        // this.questionsService.isValid.emit(this.questionForm.valid);
+        this.questionsService.isValid.emit(this.questionFormSingle.valid);
       }
     });
 
@@ -87,9 +86,7 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
     this.currentMultipleChoiceQuestion =
       changes.multipleChoiceQuestionInfo.currentValue;
     this.assignQuestion(this.currentMultipleChoiceQuestion);
-    this.updateValidators(this.currentMultipleChoiceQuestion);
-    console.log(this.questionFormSingle.valid);
-    // this.questionsService.isValid.emit(this.questionForm.valid);
+    // this.updateValidators(this.currentMultipleChoiceQuestion);
   }
 
   assignQuestion(question: MultipleChoiceQuestion): void {
@@ -126,7 +123,7 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
 
   updateValidators(question: MultipleChoiceQuestion): void {
     if (question.required) {
-      // this.questionForm.setValidators();
+      this.questionFormSingle.setValidators(ValidateMultipleChoiceQuestion);
       this.questionFormSingle.updateValueAndValidity();
       this.questionsService.isValid.emit(this.questionFormSingle.valid);
     }

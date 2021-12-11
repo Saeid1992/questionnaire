@@ -1,6 +1,8 @@
 import {
   AfterViewChecked,
+  AfterViewInit,
   Component,
+  OnChanges,
   OnInit,
 } from '@angular/core';
 import { QuestionsService } from 'src/app/services/questions.service';
@@ -10,13 +12,14 @@ import { TextQuestion } from 'src/app/models/text-question.model';
 import { QuestionType, SimpleJump } from 'src/app/models/question.model';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { GlobalValuesService } from 'src/app/services/global-values.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-questions-container',
   templateUrl: './questions-container.component.html',
   styleUrls: ['./questions-container.component.css'],
 })
-export class QuestionsContainerComponent implements OnInit, AfterViewChecked {
+export class QuestionsContainerComponent implements OnInit, AfterViewInit {
   questionnaire: Questionnaire;
   title = '';
   description = '';
@@ -34,10 +37,11 @@ export class QuestionsContainerComponent implements OnInit, AfterViewChecked {
   passedQuestions = 0;
   totalQuestions = 0;
 
-  // isValid!: boolean;
+  isValid!: boolean;
 
   constructor(private questionsService: QuestionsService,
-              private globalValuesService: GlobalValuesService) {
+              private globalValuesService: GlobalValuesService,
+              private router:Router) {
     this.questionnaire = {} as Questionnaire;
     this.allQuestions = [];
     this.currentQuestion = {} as TextQuestion; // or as MultipleChoiceQuestion
@@ -48,11 +52,11 @@ export class QuestionsContainerComponent implements OnInit, AfterViewChecked {
     this.getDataFromFile();
   }
 
-  ngAfterViewChecked(): void {
-    // this.questionsService.isValid.subscribe(isAnswerValid => {
-    //   console.log(isAnswerValid);
-    //   this.isValid = isAnswerValid;
-    // });
+  ngAfterViewInit(): void {
+    this.questionsService.isValid.subscribe(isAnswerValid => {
+      console.log(isAnswerValid);
+      this.isValid = isAnswerValid;
+    });
   }
 
   getDataFromFile(): void {
@@ -160,5 +164,9 @@ export class QuestionsContainerComponent implements OnInit, AfterViewChecked {
       (jInfo) => jInfo.value === answer
     )?.targetQuestionId as string;
     return nextQuestionId;
+  }
+
+  navigateToResultPage() {
+    this.router.navigateByUrl("/result", {state:{isAllowed:true}});
   }
 }

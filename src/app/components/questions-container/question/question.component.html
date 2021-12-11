@@ -1,6 +1,7 @@
 <div
   [@questionChange]="questionState"
   (@questionChange.done)="questionState = 'done'"
+  (@questionChange.start)="questionState = 'entering'"
 >
   <p class="question-title">{{ headline }}</p>
   <div>
