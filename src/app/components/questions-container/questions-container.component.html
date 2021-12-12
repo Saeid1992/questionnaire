@@ -3,14 +3,13 @@
     <app-header [titleOfQuestionnaire]="title"></app-header>
   </header>
   <div class="main-container">
-    <!-- <div class="progress-bar-container">
-    <label for="progress-bar">Progress:</label>
-    <progress
-      id="progress-bar"
-      [value]="passedQuestions"
-      [max]="totalQuestions"
-    ></progress>
-  </div> -->
+    <div class="progress-container">
+      <progress
+        [value]="passedQuestions"
+        [max]="totalQuestions"
+      ></progress>
+      <p>{{calculatePercentageOfCompletion()}}</p>
+    </div>
     <div class="question-container" [ngClass]="specifyClass()">
       <app-question [question]="currentQuestion"></app-question>
     </div>
@@ -18,12 +17,13 @@
       <app-navigation-buttons
         [isFirst]="isFirstQuestion"
         [isLast]="isLastQuestion"
-        (questionChanged)="onQuestionChanged($event)"
       ></app-navigation-buttons>
     </div>
     <br />
-    <div *ngIf="isLastQuestion" class="result-button-container">
-      <button (click)="navigateToResultPage()">Antworten ansehen</button>
+    <div class="result-button-container">
+      <button (click)="navigateToResultPage()" *ngIf="isLastQuestion">
+        Antworten ansehen
+      </button>
     </div>
     <div class="description-container">
       <p>{{ description }}</p>

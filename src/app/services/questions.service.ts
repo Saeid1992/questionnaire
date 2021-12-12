@@ -6,7 +6,7 @@ import {
   QuestionnaireBase,
 } from '../models/questionnaire.model';
 import { Observable, Subject } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { ApiService } from './api-service';
 import { TextQuestion } from '../models/text-question.model';
 import { MultipleChoiceQuestion } from '../models/multiple-choice-question';
@@ -19,7 +19,9 @@ export class QuestionsService {
   questionsWithAnswers: Array<TextQuestion | MultipleChoiceQuestion>;
   questionnaireTitle = '';
   totalQuestionsCount = 0;
+  resultsKey = '';
   isFormValid = new EventEmitter<boolean>();
+  questionChanged = new EventEmitter<string>();
 
   constructor(
     private globalValuesService: GlobalValuesService,
@@ -31,22 +33,28 @@ export class QuestionsService {
     this.questionsWithAnswers = [] as Array<
       TextQuestion | MultipleChoiceQuestion
     >;
+    this.generateResultKey();
   }
 
   getAllQuestions(): Observable<Questionnaire> {
     this.apiName = this.apiService.getAllQuestionsApi;
     return this.http
       .get<QuestionnaireBase>(this.url + this.apiName)
-      .pipe(map(baseQuestionnaire => this.provideCleanData(baseQuestionnaire))
+      .pipe(
+        map((baseQuestionnaire) => this.provideCleanData(baseQuestionnaire))
       );
   }
 
-  provideCleanData(data: QuestionnaireBase): Questionnaire {
+  private provideCleanData(data: QuestionnaireBase): Questionnaire {
     this.questionnaireTitle = data.questionnaire.name;
     let cleanData: Questionnaire;
     let textQuestion: TextQuestion;
     let multipleChoiceQuestion: MultipleChoiceQuestion;
-    let simpleJump: SimpleJump = {sourceQuestionId:'', value: '', targetQuestionId:''};
+    let simpleJump: SimpleJump = {
+      sourceQuestionId: '',
+      value: '',
+      targetQuestionId: '',
+    };
 
     for (const question of data.questionnaire.questions) {
       question.skipped = false;
@@ -67,41 +75,34 @@ export class QuestionsService {
       }
     }
 
-    data.questionnaire.questions.forEach((qt => {
-      if(qt.jumps.length > 0) {
+    data.questionnaire.questions.forEach((qt) => {
+      if (qt.jumps.length > 0) {
         let complexJumps = qt.jumps as Jump[];
         let simpleJumps: SimpleJump[] = [];
         for (const jmp of complexJumps) {
-          jmp.conditions.forEach(cnd => {
+          jmp.conditions.forEach((cnd) => {
             simpleJump.sourceQuestionId = cnd.field;
             simpleJump.value = cnd.value;
             simpleJump.targetQuestionId = jmp.destination.id;
-            simpleJumps.push({...simpleJump});
+            simpleJumps.push({ ...simpleJump });
           });
         }
         qt.jumps = simpleJumps;
       }
-    }));
+    });
     console.log(data.questionnaire.questions);
     cleanData = data.questionnaire;
     return cleanData;
   }
 
-  // resetQuestion(qst: TextQuestion | MultipleChoiceQuestion) : void {
-  //   let textQuestion: TextQuestion;
-  //   let multipleChoiceQuestion: MultipleChoiceQuestion;
-
-  //   switch (qst.question_type) {
-  //     case QuestionType.Text:
-  //       textQuestion = qst as TextQuestion;
-  //       textQuestion.answer = '';
-  //       break;
-  //     case QuestionType.MultipleChoice:
-  //       multipleChoiceQuestion = qst as MultipleChoiceQuestion;
-  //       multipleChoiceQuestion.choices.forEach(ch => ch.selected = false);
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // }
+  generateResultKey() {
+    let key = '';
+    let randomNumber;
+    for (let i = 0; i < 5; i++) {
+      // let randomNumber = Math.floor(Math.random() * (90 - 65 + 1) + 65);
+      randomNumber = Math.floor(Math.random() * 26 + 65);
+      key += String.fromCharCode(randomNumber);
+    }
+    this.resultsKey = key;
+  }
 }

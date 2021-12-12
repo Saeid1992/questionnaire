@@ -1,4 +1,12 @@
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   Choice,
   MultipleChoiceQuestion,
@@ -14,22 +22,34 @@ import { QuestionsService } from 'src/app/services/questions.service';
   styleUrls: ['./result.component.css'],
 })
 export class ResultComponent implements OnInit {
+  recievedKey = '';
+  actualKey = '';
   title = '';
   finalResult: Array<TextQuestion | MultipleChoiceQuestion>;
   cleanResult: [string, string, string][];
   answerConnector = '';
-  multipleAnswers : string[] = [];
+  multipleAnswers: string[] = [];
   seenQuestionsCount: number;
   totalQuestionsCount: number;
-  constructor(private questionsService: QuestionsService,
-              private globalValuesService: GlobalValuesService) {
+
+  constructor(
+    private questionsService: QuestionsService,
+    private globalValuesService: GlobalValuesService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router
+  ) {
+    this.recievedKey = this.activatedRoute.snapshot.params.key;
+    this.actualKey = this.questionsService.resultsKey;
+    if(this.recievedKey !== this.actualKey) {
+    this.router.navigateByUrl('');
+    }
     this.totalQuestionsCount = this.questionsService.totalQuestionsCount;
     this.title = this.questionsService.questionnaireTitle;
     this.finalResult = this.questionsService.questionsWithAnswers;
     this.seenQuestionsCount = this.finalResult.length;
     this.cleanResult = [];
     this.answerConnector = this.globalValuesService.MULTI_ANSWER_CONNECTOR;
-    this.wereAllQuestionsSeen();
+    // this.wereAllQuestionsSeen();
     this.prepareResult();
   }
 
@@ -62,8 +82,10 @@ export class ResultComponent implements OnInit {
             selectedOptions = multipleChoiceQuestion.choices.filter(
               (ch) => ch.selected
             );
-            if(selectedOptions.length > 0) {
-              selectedOptions.forEach(opt => this.multipleAnswers.push(opt.value));
+            if (selectedOptions.length > 0) {
+              selectedOptions.forEach((opt) =>
+                this.multipleAnswers.push(opt.value)
+              );
               userAnswer = this.multipleAnswers.join(this.answerConnector);
             }
           } else {

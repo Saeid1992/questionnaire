@@ -4,18 +4,9 @@
 }
 .welcome-message-container {
   width: 100%;
-  height: 4rem;
+  height: 5rem;
 }
 
-.welcome-message-container p {
-  text-align: center;
-  font-size: 1.2rem;
-  margin: 0;
-  padding: 2rem;
-  animation-name: message;
-  animation-duration: 5000ms;
-  animation-fill-mode: forwards;
-}
 
 @media (min-width: 45rem) {
   .welcome-message-container p {
@@ -43,7 +34,7 @@ button {
   font-weight: bold;
   border: 5px solid white;
   border-radius: 50%;
-  background-color: blue;
+  background-color: #004080;
   color: white;
   cursor: pointer;
   position: relative;
@@ -52,8 +43,58 @@ button {
   animation-fill-mode: forwards;
 }
 
+/* button :hover{
+  width: 22rem;
+  height: 12rem;
+  font-weight: bolder;
+}
+
+button :focus {
+  outline: none;
+} */
+
 @keyframes welcome-page-animation {
   0% {bottom: -50%; font-family: 'Comfortaa';}
-  50% {background-color: white; color: blue; border-color: blue;}
+  50% {background-color: white; color: #004080; border-color: #004080;}
   100%{bottom: 0;  font-family: 'Comfortaa';}
+}
+
+
+svg {
+	font-family: 'Russo One', sans-serif;
+	/* position: absolute; */
+	width: 100%; height: 100%;
+}
+svg text {
+	text-transform: uppercase;
+	animation: stroke 5s infinite alternate;
+	stroke-width: 2;
+	stroke: #004080;
+	font-size: 4rem;
+  font-family: 'Comfortaa';
+}
+
+@media (min-width: 45rem) {
+  svg text {
+    font-size: 7rem;
+  }
+}
+
+@media (min-width: 70rem) {
+  svg text {
+    font-size: 11rem;
+  }
+}
+
+@keyframes stroke {
+	0%   {
+		fill: rgba(72,138,20,0); stroke: rgba(54,95,160,1);
+		stroke-dashoffset: 25%; stroke-dasharray: 0 50%; stroke-width: 2;
+	}
+	70%  {fill: rgba(72,138,20,0); stroke: rgba(54,95,160,1); }
+	80%  {fill: rgba(72,138,20,0); stroke: rgba(54,95,160,1); stroke-width: 3; }
+	100% {
+		fill: rgba(72,138,204,1); stroke: rgba(54,95,160,0);
+		stroke-dashoffset: -25%; stroke-dasharray: 50% 0; stroke-width: 0;
+	}
 }

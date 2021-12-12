@@ -67,6 +67,7 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
           this.selectedItemIndex
         ].selected = true;
         this.selectionChanged.emit(this.currentMultipleChoiceQuestion);
+        this.questionsService.questionChanged.emit('next');
       }
       this.questionsService.isFormValid.emit(this.questionFormSingle.valid);
     });

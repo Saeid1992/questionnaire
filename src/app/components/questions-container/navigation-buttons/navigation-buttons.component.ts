@@ -19,8 +19,8 @@ export class NavigationButtonsComponent implements OnInit, OnChanges {
   @Input() isFirst = true;
   @Input() isLast = false;
   // @Input() isDisabled = true;
-  isDisabled = true;
-  @Output() questionChanged = new EventEmitter<string>();
+  // isDisabled = true;
+  // @Output() questionChanged = new EventEmitter<string>();
 
   symbolOfPreviousQuestion = '<';
   symbolOfNextQuestion = '>';
@@ -35,10 +35,10 @@ export class NavigationButtonsComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.questionsService.isFormValid.subscribe((isValid) => {
-      this.isDisabled = !isValid;
-      console.log(isValid);
-    });
+    // this.questionsService.isFormValid.subscribe((isValid) => {
+    //   this.isDisabled = !isValid;
+    //   console.log(isValid);
+    // });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -48,12 +48,10 @@ export class NavigationButtonsComponent implements OnInit, OnChanges {
   changeCurrentQuestion(direction: string): void {
     switch (direction) {
       case this.previousQuestion:
-        this.questionChanged.emit(this.previousQuestion);
+        this.questionsService.questionChanged.emit(this.previousQuestion);
         break;
       case this.nextQuestion:
-        this.questionChanged.emit(this.nextQuestion);
-        break;
-      default:
+        this.questionsService.questionChanged.emit(this.nextQuestion);
         break;
     }
   }

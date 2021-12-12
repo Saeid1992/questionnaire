@@ -9,7 +9,7 @@ const routes: Routes = [
   {path:'', redirectTo:'/welcome', pathMatch:'full'},
   {path:'welcome', component:WelcomeComponent},
   {path:'questions-container', component:QuestionsContainerComponent},
-  {path:'result', component:ResultComponent},
+  {path:'result/:key', component:ResultComponent},
   {path:'**', component:PageNotFoundComponent}
 ];
 

@@ -20,6 +20,7 @@ import { DisplayFinalAnswerPipe } from './pipes/final-answers.pipe';
 import { FooterComponent } from './components/footer/footer.component';
 import { DarkenDirective } from './directives/darken.directive';
 import { NavigationButtonsComponent } from './components/questions-container/navigation-buttons/navigation-buttons.component';
+import { HighlightDirective } from './directives/highlight.directive';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { NavigationButtonsComponent } from './components/questions-container/nav
     NavigationButtonsComponent,
 
     DarkenDirective,
+    HighlightDirective,
 
     DisplayFinalAnswerPipe,
   ],

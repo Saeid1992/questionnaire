@@ -3,10 +3,22 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 4rem;
+  height: 3rem;
   text-align: center;
   vertical-align: middle;
   background-image: linear-gradient(to right,#80bfff,white,white,#80bfff);
   color: #004080;
   border-bottom: 4px solid #004080;
+  font-size: 1.2rem;
+}
+@media (min-width: 45rem) {
+  .header-container {
+    font-size: 2rem;
+  }
+}
+
+@media (min-width: 70rem) {
+  .header-container {
+    font-size: 2.5rem;
+  }
 }

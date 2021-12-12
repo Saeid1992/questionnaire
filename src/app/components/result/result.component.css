@@ -9,12 +9,13 @@
   justify-content: space-evenly;
   align-items: center;
   background-color: white;
-  border: 5px solid blue;
+  border: 5px solid #004080;
   border-radius: 5px;
 }
 
 .result-container > div {
   text-align: center;
+  width: 100%;
 }
 
 .question {

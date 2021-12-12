@@ -1,56 +1,18 @@
-import {
-  AfterContentChecked,
-  AfterViewChecked,
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  OnChanges,
-  OnInit,
-  Renderer2,
-  ViewChild,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { QuestionsService } from 'src/app/services/questions.service';
 import { Questionnaire } from 'src/app/models/questionnaire.model';
 import { MultipleChoiceQuestion } from 'src/app/models/multiple-choice-question';
 import { TextQuestion } from 'src/app/models/text-question.model';
 import { QuestionType, SimpleJump } from 'src/app/models/question.model';
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
 import { GlobalValuesService } from 'src/app/services/global-values.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-questions-container',
   templateUrl: './questions-container.component.html',
   styleUrls: ['./questions-container.component.css'],
-  // animations: [
-  //   trigger('questionState', [
-  //     state(
-  //       'nextIn',
-  //       style({
-  //         opacity: 0.6
-  //       })
-  //     ),
-  //     state(
-  //       'previousOut',
-  //       style({
-  //         opacity: 0.3,
-  //       })
-  //     ),
-  //     transition('previousOut => nextIn', animate(1000)),
-  //     transition('goingOut => comingIn', animate(1000)),
-  //   ]),
-  // ],
 })
-export class QuestionsContainerComponent implements OnInit, AfterViewInit {
-  // @ViewChild('questionContainer') questionContainer!: ElementRef;
+export class QuestionsContainerComponent implements OnInit {
   questionnaire: Questionnaire;
   title = '';
   description = '';
@@ -70,15 +32,13 @@ export class QuestionsContainerComponent implements OnInit, AfterViewInit {
   passedQuestions = 0;
   totalQuestions = 0;
   toNext = true;
-  isValid! : boolean;
-  // questionState = 'state';
+  isValid!: boolean;
   animationType = '';
-
 
   constructor(
     private questionsService: QuestionsService,
     private globalValuesService: GlobalValuesService,
-    private router: Router,
+    private router: Router
   ) {
     this.questionnaire = {} as Questionnaire;
     this.allQuestions = [];
@@ -90,16 +50,12 @@ export class QuestionsContainerComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.getDataFromFile();
+    this.questionsService.questionChanged.subscribe((direction) => {
+      this.onQuestionChanged(direction);
+    });
   }
 
-  ngAfterViewInit(): void {
-    // this.questionsService.isFormValid.subscribe((validAnswer) => {
-    //   this.isValid = validAnswer;
-    //   console.log(validAnswer);
-    // });
-  }
-
-  getDataFromFile(): void {
+  private getDataFromFile(): void {
     this.questionsService.getAllQuestions().subscribe((data: Questionnaire) => {
       this.questionnaire = data;
       this.title = this.questionsService.questionnaireTitle;
@@ -113,7 +69,7 @@ export class QuestionsContainerComponent implements OnInit, AfterViewInit {
     });
   }
 
-  startQuestionnaire(): void {
+  private startQuestionnaire(): void {
     let firstQuestion =
       this.questionsService.questionsWithAnswers[this.firstQuestionIndex];
     this.currentQuestion = firstQuestion;
@@ -121,7 +77,6 @@ export class QuestionsContainerComponent implements OnInit, AfterViewInit {
 
   onQuestionChanged(changeDirection: string) {
     console.log(changeDirection);
-
     switch (changeDirection) {
       case this.previous:
         this.animationType = 'leave-from-right';
@@ -202,7 +157,9 @@ export class QuestionsContainerComponent implements OnInit, AfterViewInit {
     this.isFirstQuestion = false;
   }
 
-  findUserAnswer(question: TextQuestion | MultipleChoiceQuestion): string {
+  private findUserAnswer(
+    question: TextQuestion | MultipleChoiceQuestion
+  ): string {
     let answer = '';
     let textQuestion: TextQuestion;
     let multipleChoiceQuestion: MultipleChoiceQuestion;
@@ -224,7 +181,7 @@ export class QuestionsContainerComponent implements OnInit, AfterViewInit {
     return answer;
   }
 
-  findNextQuestionId(
+  private findNextQuestionId(
     question: TextQuestion | MultipleChoiceQuestion,
     answer: string
   ): string {
@@ -236,10 +193,20 @@ export class QuestionsContainerComponent implements OnInit, AfterViewInit {
   }
 
   navigateToResultPage() {
-    this.router.navigateByUrl('/result', { state: { isAllowed: true } });
+    let secretKey = this.questionsService.resultsKey;
+    // this.router.navigateByUrl(`/result`);
+    console.log(secretKey);
+    this.router.navigate(['/result',secretKey]);
   }
 
   specifyClass() {
     return this.animationType;
+  }
+
+  calculatePercentageOfCompletion(): string {
+    let percentageOfCompletion = Math.round(
+      (this.passedQuestions / this.totalQuestions) * 100
+    );
+    return percentageOfCompletion + '%';
   }
 }

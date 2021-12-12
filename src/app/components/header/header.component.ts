@@ -7,7 +7,7 @@ import { QuestionsService } from 'src/app/services/questions.service';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  @Input() titleOfQuestionnaire : string = '';
+  @Input() titleOfQuestionnaire: string ='';
   constructor(private questionsService: QuestionsService) {
    }
 
