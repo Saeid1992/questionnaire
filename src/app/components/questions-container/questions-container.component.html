@@ -1,6 +1,9 @@
-<app-header [titleOfQuestionnaire]="title" class="header"></app-header>
-<div class="main-container">
-  <!-- <div class="progress-bar-container">
+<div class="page-container">
+  <header>
+    <app-header [titleOfQuestionnaire]="title"></app-header>
+  </header>
+  <div class="main-container">
+    <!-- <div class="progress-bar-container">
     <label for="progress-bar">Progress:</label>
     <progress
       id="progress-bar"
@@ -8,29 +11,25 @@
       [max]="totalQuestions"
     ></progress>
   </div> -->
-  <div class="question-container">
-    <app-question [question]="currentQuestion"></app-question>
+    <div class="question-container" [ngClass]="specifyClass()">
+      <app-question [question]="currentQuestion"></app-question>
+    </div>
+    <div class="navigation-buttons-container">
+      <app-navigation-buttons
+        [isFirst]="isFirstQuestion"
+        [isLast]="isLastQuestion"
+        (questionChanged)="onQuestionChanged($event)"
+      ></app-navigation-buttons>
+    </div>
+    <br />
+    <div *ngIf="isLastQuestion" class="result-button-container">
+      <button (click)="navigateToResultPage()">Antworten ansehen</button>
+    </div>
+    <div class="description-container">
+      <p>{{ description }}</p>
+    </div>
   </div>
-  <div class="button-container">
-    <button
-      [disabled]="isFirstQuestion"
-      (click)="navigateToPreviousQuestion(currentQuestion)"
-    >
-      {{ previousQuestionSymbol }}
-    </button>
-    <button
-      [disabled]="isLastQuestion || !isValid"
-      (click)="navigateToNextQuestion(currentQuestion)"
-    >
-      {{ nextQuestionSymbol }}
-    </button>
-  </div>
-  <br />
-  <div *ngIf="isLastQuestion" class="result-button-container">
-    <button (click)="navigateToResultPage()">See result</button>
-  </div>
-  <div class="description-container">
-    <p>{{ description }}</p>
-  </div>
+  <!-- <footer>
+    <app-footer class="footer"></app-footer>
+  </footer> -->
 </div>
-<!-- <app-footer></app-footer> -->

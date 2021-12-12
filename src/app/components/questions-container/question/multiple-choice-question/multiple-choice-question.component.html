@@ -1,7 +1,7 @@
 <div>
   <div *ngIf="!isMultipleAnswerAllowed">
     <form [formGroup]="questionFormSingle">
-      <div *ngFor="let choice of initialChoices" class="option-container">
+      <div appDarkenDirective *ngFor="let choice of initialChoices" class="option-container">
         <label>
           <input type="radio"
                  formControlName="choice"

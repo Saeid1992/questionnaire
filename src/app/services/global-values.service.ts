@@ -37,7 +37,9 @@ export class GlobalValuesService {
         multiple: '',
     }
 
-    MULTI_ANSWER_CONNECTOR = ' UND '
+    MULTI_ANSWER_CONNECTOR = ' UND ';
+    NEXT_QUESTION_TEXT = 'next';
+    PREVIOUS_QUESTION_TEXT = 'previous';
 
     constructor() {}
 }

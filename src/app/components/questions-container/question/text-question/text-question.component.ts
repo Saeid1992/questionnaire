@@ -41,7 +41,7 @@ export class TextQuestionComponent implements OnInit {
     this.questionForm.valueChanges.subscribe((formValue) => {
       this.currentTextQuestion.answer = formValue.userAnswer;
       this.textChanged.emit(this.currentTextQuestion);
-      this.questionsService.isValid.emit(this.questionForm.valid);
+      this.questionsService.isFormValid.emit(this.questionForm.valid);
     });
   }
 
@@ -49,7 +49,7 @@ export class TextQuestionComponent implements OnInit {
     console.log(changes);
     this.currentTextQuestion = changes.textQuestionInfo.currentValue;
     this.updateQuestion(this.currentTextQuestion);
-    this.questionsService.isValid.emit(this.questionForm.valid);
+    this.questionsService.isFormValid.next(this.questionForm.valid);
   }
 
   updateQuestion(question: TextQuestion) {

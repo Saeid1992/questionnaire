@@ -5,8 +5,7 @@ import {
   OnChanges,
   OnInit,
   Output,
-  SimpleChanges,
-  ɵresetJitOptions,
+  SimpleChanges
 } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import {
@@ -15,7 +14,8 @@ import {
 } from 'src/app/models/multiple-choice-question';
 import { GlobalValuesService } from 'src/app/services/global-values.service';
 import { QuestionsService } from 'src/app/services/questions.service';
-import { ValidateMultipleChoiceQuestion } from 'src/app/validators/multiple-choice-question.validator';
+import { ValidateFormAsync } from 'src/app/validators/multiple-choice-question.validator';
+// import { ValidateMultipleChoiceQuestion } from 'src/app/validators/multiple-choice-question.validator';
 
 @Component({
   selector: 'app-multiple-choice-question',
@@ -67,8 +67,8 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
           this.selectedItemIndex
         ].selected = true;
         this.selectionChanged.emit(this.currentMultipleChoiceQuestion);
-        this.questionsService.isValid.emit(this.questionFormSingle.valid);
       }
+      this.questionsService.isFormValid.emit(this.questionFormSingle.valid);
     });
 
     this.questionFormMultiple.valueChanges.subscribe((formValue) => {
@@ -123,9 +123,10 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
 
   updateValidators(question: MultipleChoiceQuestion): void {
     if (question.required) {
-      this.questionFormSingle.setValidators(ValidateMultipleChoiceQuestion);
+      // this.questionFormSingle.setValidators(ValidateFormAsync);
+      this.questionFormSingle.setAsyncValidators(ValidateFormAsync());
       this.questionFormSingle.updateValueAndValidity();
-      this.questionsService.isValid.emit(this.questionFormSingle.valid);
+      this.questionsService.isFormValid.emit(this.questionFormSingle.valid);
     }
   }
 

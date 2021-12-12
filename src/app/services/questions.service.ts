@@ -5,8 +5,8 @@ import {
   Questionnaire,
   QuestionnaireBase,
 } from '../models/questionnaire.model';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { ApiService } from './api-service';
 import { TextQuestion } from '../models/text-question.model';
 import { MultipleChoiceQuestion } from '../models/multiple-choice-question';
@@ -18,7 +18,8 @@ export class QuestionsService {
   apiName = '';
   questionsWithAnswers: Array<TextQuestion | MultipleChoiceQuestion>;
   questionnaireTitle = '';
-  isValid = new EventEmitter<boolean>();
+  totalQuestionsCount = 0;
+  isFormValid = new EventEmitter<boolean>();
 
   constructor(
     private globalValuesService: GlobalValuesService,
@@ -36,8 +37,7 @@ export class QuestionsService {
     this.apiName = this.apiService.getAllQuestionsApi;
     return this.http
       .get<QuestionnaireBase>(this.url + this.apiName)
-      .pipe(
-        map(baseQuestionnaire => this.provideCleanData(baseQuestionnaire))
+      .pipe(map(baseQuestionnaire => this.provideCleanData(baseQuestionnaire))
       );
   }
 

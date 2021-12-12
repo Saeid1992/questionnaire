@@ -8,10 +8,5 @@
   vertical-align: middle;
   background-image: linear-gradient(to right,#004080,white,white,#004080);
   margin-top: 1rem;
-  border-top: 4px solid black;
-}
-
-footer {
-  position: absolute;
-  bottom: 0;
+  border-top: 4px solid #004080;
 }

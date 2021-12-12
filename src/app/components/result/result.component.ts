@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import {
   Choice,
   MultipleChoiceQuestion,
@@ -20,22 +19,25 @@ export class ResultComponent implements OnInit {
   cleanResult: [string, string, string][];
   answerConnector = '';
   multipleAnswers : string[] = [];
+  seenQuestionsCount: number;
+  totalQuestionsCount: number;
   constructor(private questionsService: QuestionsService,
-              private globalValuesService: GlobalValuesService,
-              private router: Router) {
-
-    // if(!this.router.getCurrentNavigation()) {
-    //   console.log('asdas');
-    //   this.router.navigateByUrl('');
-    // }
+              private globalValuesService: GlobalValuesService) {
+    this.totalQuestionsCount = this.questionsService.totalQuestionsCount;
     this.title = this.questionsService.questionnaireTitle;
     this.finalResult = this.questionsService.questionsWithAnswers;
+    this.seenQuestionsCount = this.finalResult.length;
     this.cleanResult = [];
     this.answerConnector = this.globalValuesService.MULTI_ANSWER_CONNECTOR;
+    this.wereAllQuestionsSeen();
     this.prepareResult();
   }
 
   ngOnInit(): void {}
+
+  wereAllQuestionsSeen() {
+    return this.seenQuestionsCount === this.totalQuestionsCount;
+  }
 
   prepareResult() {
     let questionId = '';

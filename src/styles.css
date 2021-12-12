@@ -15,13 +15,15 @@ html,
 body {
   height: 100%;
   font-family:'Comfortaa';
+  overflow-x: hidden;
 }
+
 body {
   margin: 0;
   box-sizing: border-box;
   background-image: linear-gradient(#ffffff , #80bfff );
   /* background-position: center; */
-  background-repeat: none;
+  background-repeat: no-repeat;
   background-size: cover;
 }
 

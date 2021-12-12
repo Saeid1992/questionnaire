@@ -7,9 +7,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PageNotFoundComponent implements OnInit {
 
-  constructor() { }
+  text = '';
+  firstPageUrl = '';
+
+  constructor() {
+   }
 
   ngOnInit(): void {
+    this.text = 'Sorry! Page not found!'
+    this.firstPageUrl = '/';
   }
 
 }

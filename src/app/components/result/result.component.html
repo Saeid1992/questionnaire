@@ -1,12 +1,15 @@
 <app-header [titleOfQuestionnaire]="title"></app-header>
 <div class="main-container">
-  <div class="result-container">
+  <div *ngIf="wereAllQuestionsSeen()" class="result-container">
     <div *ngFor="let result of cleanResult">
       <p class="question">{{ result[1] }}</p>
       <p [ngClass]="result[2] ? 'hasAnswer' : 'hasNotAnswer'">
         {{ result[2] | displayAnswer }}
       </p>
     </div>
+  </div>
+  <div *ngIf="!wereAllQuestionsSeen()">
+    Please answer questions to see the result!
   </div>
 </div>
 <!-- <app-footer></app-footer> -->
