@@ -43,7 +43,6 @@ export class QuestionsContainerComponent implements OnInit {
     private questionsService: QuestionsService,
     private globalValuesService: GlobalValuesService,
     private router: Router,
-    private cdr: ChangeDetectorRef
   ) {
     this.questionnaire = {} as Questionnaire;
     this.allQuestions = [];
@@ -62,9 +61,6 @@ export class QuestionsContainerComponent implements OnInit {
     });
   }
 
-  // ngAfterViewChecked(): void {
-  //   this.cdr.detectChanges();
-  // }
   //#endregion
 
   //#region Public methods
@@ -208,6 +204,8 @@ export class QuestionsContainerComponent implements OnInit {
       this.totalQuestions = this.questionsService.questionsWithAnswers.length;
       this.lastQuestionIndex = this.totalQuestions - 1;
       this.startQuestionnaire();
+    }, (err) => {
+      console.warn(err);
     });
   }
 

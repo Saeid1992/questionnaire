@@ -94,9 +94,7 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
     this.currentMultipleChoiceQuestion =
       changes.multipleChoiceQuestionInfo.currentValue;
     this.assignQuestion(this.currentMultipleChoiceQuestion);
-    // this.updateValidators(this.currentMultipleChoiceQuestion);
-    this.questionsService.isFormValid.emit(this.questionFormSingle.valid);
-
+    this.updateValidators(this.currentMultipleChoiceQuestion);
   }
   //#endregion
 
@@ -142,11 +140,9 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
    */
   private updateValidators(question: MultipleChoiceQuestion): void {
     if (question.required) {
-      this.questionFormSingle.setValidators(() =>
-        ValidateMultipleChoiceQuestion()
-      );
-      // this.questionFormSingle.setAsyncValidators(ValidateFormAsync());
+      this.questionFormSingle.setValidators(ValidateMultipleChoiceQuestion);
       this.questionFormSingle.updateValueAndValidity();
+      this.questionsService.isFormValid.emit(this.questionFormSingle.valid);
     }
   }
 

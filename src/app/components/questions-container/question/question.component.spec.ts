@@ -47,9 +47,9 @@ describe('QuestionsComponent', () => {
     questionsService = TestBed.inject(QuestionsService);
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+  // it('should create', () => {
+  //   expect(component).toBeTruthy();
+  // });
 
   // it('should get data from the json file', () => {
 

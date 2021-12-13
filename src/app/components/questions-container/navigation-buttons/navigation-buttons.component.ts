@@ -78,6 +78,4 @@ export class NavigationButtonsComponent implements OnInit, OnChanges {
     }
   }
   //#endregion
-
-
 }
