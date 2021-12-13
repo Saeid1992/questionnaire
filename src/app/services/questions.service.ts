@@ -15,7 +15,6 @@ import { Jump, QuestionType, SimpleJump } from '../models/question.model';
 @Injectable()
 export class QuestionsService {
   //#region Public properties
-  isFormValid = new EventEmitter<boolean>();
   questionChanged = new EventEmitter<string>();
   questionsWithAnswers: Array<TextQuestion | MultipleChoiceQuestion>;
   questionnaireTitle = '';

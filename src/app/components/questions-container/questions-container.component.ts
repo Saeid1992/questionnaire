@@ -33,7 +33,6 @@ export class QuestionsContainerComponent implements OnInit {
   private next = '';
   private formerQuestionsIndex: number[] = [];
   private resultPageUrl = '';
-  private isValid!: boolean;
   private animationType = '';
   private resultPage = '';
   //#endregion
@@ -56,7 +55,6 @@ export class QuestionsContainerComponent implements OnInit {
   ngOnInit(): void {
     this.getDataFromFile();
     this.questionsService.questionChanged.subscribe((direction) => {
-      console.log(direction);
       this.onQuestionChanged(direction);
     });
   }
@@ -80,7 +78,6 @@ export class QuestionsContainerComponent implements OnInit {
         }, 100);
         break;
       case this.next:
-        console.log('to next');
         this.animationType = 'leave-from-left';
         setTimeout(() => {
           this.navigateToNextQuestion(this.currentQuestion);

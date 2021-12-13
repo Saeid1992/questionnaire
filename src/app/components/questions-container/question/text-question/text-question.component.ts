@@ -7,7 +7,7 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { TextQuestion } from 'src/app/models/text-question.model';
 import { GlobalValuesService } from 'src/app/services/global-values.service';
 import { QuestionsService } from 'src/app/services/questions.service';
@@ -50,14 +50,12 @@ export class TextQuestionComponent implements OnInit, OnChanges {
     this.questionForm.valueChanges.subscribe((formValue) => {
       this.currentTextQuestion.answer = formValue.userAnswer;
       this.textChanged.emit(this.currentTextQuestion);
-      this.questionsService.isFormValid.emit(this.questionForm.valid);
     });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.currentTextQuestion = changes.textQuestionInfo.currentValue;
     this.updateQuestion(this.currentTextQuestion);
-    this.questionsService.isFormValid.emit(this.questionForm.valid);
   }
   //#endregion
 
@@ -72,10 +70,6 @@ export class TextQuestionComponent implements OnInit, OnChanges {
     this.isRequired = question.required;
     const previousAnswer = question.answer;
     this.questionForm.setControl('userAnswer', new FormControl(previousAnswer));
-    if (this.isRequired) {
-      this.questionForm.get('userAnswer')?.setValidators(Validators.required);
-      this.questionForm.updateValueAndValidity();
-    }
   }
   //#endregion
 }

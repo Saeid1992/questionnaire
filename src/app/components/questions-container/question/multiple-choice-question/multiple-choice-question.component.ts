@@ -7,15 +7,13 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import {
   Choice,
   MultipleChoiceQuestion,
 } from 'src/app/models/multiple-choice-question';
 import { GlobalValuesService } from 'src/app/services/global-values.service';
 import { QuestionsService } from 'src/app/services/questions.service';
-import { ValidateMultipleChoiceQuestion } from 'src/app/validators/multiple-choice-question.validator';
-
 @Component({
   selector: 'app-multiple-choice-question',
   templateUrl: './multiple-choice-question.component.html',
@@ -32,6 +30,7 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
   isMultipleAnswerAllowed = false;
   questionFormSingle: FormGroup;
   questionFormMultiple: FormGroup;
+  isAnotherQuestion = false;
   // questionFormMultipleAnswer: FormArray;
   //#endregion
 
@@ -62,7 +61,6 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.questionFormSingle.valueChanges.subscribe((formValue) => {
-      if(!this.questionFormSingle.pristine) {
         this.resetFormValue();
         this.currentMultipleChoiceQuestion.choices = this.initialChoices;
         this.selectedItemIndex =
@@ -73,11 +71,9 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
           this.currentMultipleChoiceQuestion.choices[
             this.selectedItemIndex
           ].selected = true;
-          this.questionsService.questionChanged.emit('next');
+          // this.questionsService.questionChanged.emit('next');
           this.selectionChanged.emit(this.currentMultipleChoiceQuestion);
-          this.questionsService.isFormValid.emit(this.questionFormSingle.valid);
         }
-      }
     });
 
     this.questionFormMultiple.valueChanges.subscribe((formValue) => {
@@ -90,11 +86,9 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.questionFormSingle.markAsPristine();
     this.currentMultipleChoiceQuestion =
       changes.multipleChoiceQuestionInfo.currentValue;
     this.assignQuestion(this.currentMultipleChoiceQuestion);
-    this.updateValidators(this.currentMultipleChoiceQuestion);
   }
   //#endregion
 
@@ -131,18 +125,6 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
           });
         }
         break;
-    }
-  }
-
-  /**
-   * Updates the validation policies of the question
-   * @param question The current question
-   */
-  private updateValidators(question: MultipleChoiceQuestion): void {
-    if (question.required) {
-      this.questionFormSingle.setValidators(ValidateMultipleChoiceQuestion);
-      this.questionFormSingle.updateValueAndValidity();
-      this.questionsService.isFormValid.emit(this.questionFormSingle.valid);
     }
   }
 

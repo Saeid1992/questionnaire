@@ -9,7 +9,7 @@
         "identifier": "list_12110962",
         "headline": "Wen möchtest Du versichern?",
         "description": null,
-        "required": true,
+        "required": false,
         "multiple": "false",
         "choices": [
           {
@@ -45,7 +45,7 @@
         "identifier": "list_12111610",
         "headline": "Bist Du Beamter oder im öffentlichen Dienst angestellt?",
         "description": null,
-        "required": true,
+        "required": false,
         "multiple": "false",
         "choices": [
           {
