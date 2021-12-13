@@ -1,17 +1,10 @@
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   Choice,
   MultipleChoiceQuestion,
 } from 'src/app/models/multiple-choice-question';
-import { QuestionType, SimpleJump } from 'src/app/models/question.model';
+import { QuestionType } from 'src/app/models/question.model';
 import { TextQuestion } from 'src/app/models/text-question.model';
 import { GlobalValuesService } from 'src/app/services/global-values.service';
 import { QuestionsService } from 'src/app/services/questions.service';
@@ -21,17 +14,21 @@ import { QuestionsService } from 'src/app/services/questions.service';
   templateUrl: './result.component.html',
   styleUrls: ['./result.component.css'],
 })
-export class ResultComponent implements OnInit {
-  recievedKey = '';
-  actualKey = '';
+export class ResultComponent {
+  //#region Public properties
   title = '';
-  finalResult: Array<TextQuestion | MultipleChoiceQuestion>;
   cleanResult: [string, string, string][];
-  answerConnector = '';
-  multipleAnswers: string[] = [];
-  seenQuestionsCount: number;
-  totalQuestionsCount: number;
+  //#endregion
 
+  //#region Private properties
+  private recievedKey = '';
+  private actualKey = '';
+  private finalResult: Array<TextQuestion | MultipleChoiceQuestion>;
+  private answerConnector = '';
+  private multipleAnswers: string[] = [];
+  //#endregion
+
+  //#region Lifecycle hooks
   constructor(
     private questionsService: QuestionsService,
     private globalValuesService: GlobalValuesService,
@@ -40,26 +37,24 @@ export class ResultComponent implements OnInit {
   ) {
     this.recievedKey = this.activatedRoute.snapshot.params.key;
     this.actualKey = this.questionsService.resultsKey;
-    if(this.recievedKey !== this.actualKey) {
-    this.router.navigateByUrl('');
+    if (this.recievedKey !== this.actualKey) {
+      this.router.navigateByUrl('');
     }
-    this.totalQuestionsCount = this.questionsService.totalQuestionsCount;
     this.title = this.questionsService.questionnaireTitle;
     this.finalResult = this.questionsService.questionsWithAnswers;
-    this.seenQuestionsCount = this.finalResult.length;
     this.cleanResult = [];
     this.answerConnector = this.globalValuesService.MULTI_ANSWER_CONNECTOR;
-    // this.wereAllQuestionsSeen();
     this.prepareResult();
   }
 
-  ngOnInit(): void {}
+  //#endregion
 
-  wereAllQuestionsSeen() {
-    return this.seenQuestionsCount === this.totalQuestionsCount;
-  }
+  //#region Private methods
 
-  prepareResult() {
+  /**
+   * Provides the collection of questions and their responding answer given by the user
+   */
+  private prepareResult(): void {
     let questionId = '';
     let questionTitle = '';
     let userAnswer = '';
@@ -100,4 +95,5 @@ export class ResultComponent implements OnInit {
       }
     }
   }
+  //#endregion
 }

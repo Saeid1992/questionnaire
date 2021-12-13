@@ -16,25 +16,32 @@ import { QuestionsService } from 'src/app/services/questions.service';
   styleUrls: ['./navigation-buttons.component.css'],
 })
 export class NavigationButtonsComponent implements OnInit, OnChanges {
+  //#region Inputs and Outputs
   @Input() isFirst = true;
   @Input() isLast = false;
   // @Input() isDisabled = true;
   // isDisabled = true;
   // @Output() questionChanged = new EventEmitter<string>();
+  //#endregion
 
+  //#region Public properties
   symbolOfPreviousQuestion = '<';
   symbolOfNextQuestion = '>';
-
   nextQuestion = '';
   previousQuestion = '';
+  //#endregion
 
-  constructor(private globalValuesService: GlobalValuesService,
-              private questionsService: QuestionsService) {
+  //#region Lifecycle hooks
+  constructor(
+    private globalValuesService: GlobalValuesService,
+    private questionsService: QuestionsService
+  ) {
     this.nextQuestion = this.globalValuesService.NEXT_QUESTION_TEXT;
     this.previousQuestion = this.globalValuesService.PREVIOUS_QUESTION_TEXT;
   }
 
   ngOnInit(): void {
+    console.log('Navigation');
     // this.questionsService.isFormValid.subscribe((isValid) => {
     //   this.isDisabled = !isValid;
     //   console.log(isValid);
@@ -44,7 +51,14 @@ export class NavigationButtonsComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes);
   }
+  //#endregion
 
+  //#region Public methods
+
+  /**
+   * Emits the value of the direction change (informs the parent component about switching the question)
+   * @param direction The direction to which the user intends to navigate
+   */
   changeCurrentQuestion(direction: string): void {
     switch (direction) {
       case this.previousQuestion:
@@ -55,4 +69,5 @@ export class NavigationButtonsComponent implements OnInit, OnChanges {
         break;
     }
   }
+  //#endregion
 }

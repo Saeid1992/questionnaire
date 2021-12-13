@@ -11,6 +11,7 @@
   background-color: white;
   border: 5px solid #004080;
   border-radius: 5px;
+  animation: topToBottom ease 2s;
 }
 
 .result-container > div {
@@ -28,4 +29,19 @@
 
 .hasAnswer {
   color: green;
+}
+
+@keyframes topToBottom {
+  0% {
+    margin-top: -100%;
+    opacity: 0;
+    background-color: #004080;
+    color: white;
+  }
+  100% {
+    margin-top: 0%;
+    opacity: 1;
+    background-color: white;
+    color: #004080;
+  }
 }

@@ -1,6 +1,6 @@
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { ApiService } from 'src/app/services/api-service';
 import { GlobalValuesService } from 'src/app/services/global-values.service';
 import { QuestionsService } from 'src/app/services/questions.service';
@@ -13,7 +13,14 @@ describe('ResultComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ResultComponent],
-      providers: [GlobalValuesService, QuestionsService, ApiService, HttpClient, HttpHandler, Router],
+      imports: [RouterTestingModule],
+      providers: [
+        GlobalValuesService,
+        QuestionsService,
+        ApiService,
+        HttpClient,
+        HttpHandler,
+      ],
     }).compileComponents();
   });
 

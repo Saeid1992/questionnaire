@@ -5,7 +5,7 @@ import {
   Questionnaire,
   QuestionnaireBase,
 } from '../models/questionnaire.model';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ApiService } from './api-service';
 import { TextQuestion } from '../models/text-question.model';
@@ -14,15 +14,19 @@ import { Jump, QuestionType, SimpleJump } from '../models/question.model';
 
 @Injectable()
 export class QuestionsService {
-  url = '';
-  apiName = '';
-  questionsWithAnswers: Array<TextQuestion | MultipleChoiceQuestion>;
-  questionnaireTitle = '';
-  totalQuestionsCount = 0;
-  resultsKey = '';
+  //#region Public properties
   isFormValid = new EventEmitter<boolean>();
   questionChanged = new EventEmitter<string>();
+  questionsWithAnswers: Array<TextQuestion | MultipleChoiceQuestion>;
+  questionnaireTitle = '';
+  resultsKey = '';
+  //#endregion
+  //#region Private properties
+  private url = '';
+  private apiName = '';
+  //#endregion
 
+  //#region Lifecycle hooks
   constructor(
     private globalValuesService: GlobalValuesService,
     private apiService: ApiService,
@@ -35,7 +39,13 @@ export class QuestionsService {
     >;
     this.generateResultKey();
   }
+  //#endregion
 
+  //#region Public methods
+  /**
+   * Fetchs the questionnaire data by sending a GET request to a local JSON file
+   * @returns An observable of the questionnaire raw data
+   */
   getAllQuestions(): Observable<Questionnaire> {
     this.apiName = this.apiService.getAllQuestionsApi;
     return this.http
@@ -44,7 +54,14 @@ export class QuestionsService {
         map((baseQuestionnaire) => this.provideCleanData(baseQuestionnaire))
       );
   }
+  //#endregion
 
+  //#region Private methods
+  /**
+   * Preprocesses the retrieved data fetched from the file and provides a neat data
+   * @param data The raw data which needs to be cleaned
+   * @returns Clean data
+   */
   private provideCleanData(data: QuestionnaireBase): Questionnaire {
     this.questionnaireTitle = data.questionnaire.name;
     let cleanData: Questionnaire;
@@ -70,8 +87,6 @@ export class QuestionsService {
           multipleChoiceQuestion.multiple =
             multipleChoiceQuestion.multiple === 'true' ? true : false;
           break;
-        default:
-          break;
       }
     }
 
@@ -90,19 +105,22 @@ export class QuestionsService {
         qt.jumps = simpleJumps;
       }
     });
-    console.log(data.questionnaire.questions);
     cleanData = data.questionnaire;
     return cleanData;
   }
 
-  generateResultKey() {
+  /**
+   * Generates a random string which consists of uppercase letters
+   */
+  private generateResultKey() : void {
     let key = '';
     let randomNumber;
     for (let i = 0; i < 5; i++) {
-      // let randomNumber = Math.floor(Math.random() * (90 - 65 + 1) + 65);
+      // randomNumber = Math.floor(Math.random() * (90 - 65 + 1) + 65);
       randomNumber = Math.floor(Math.random() * 26 + 65);
       key += String.fromCharCode(randomNumber);
     }
     this.resultsKey = key;
   }
+  //#endregion
 }

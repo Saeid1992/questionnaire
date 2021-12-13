@@ -2,14 +2,13 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   OnInit,
   Output,
   SimpleChanges,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import {
-  TextQuestion,
-} from 'src/app/models/text-question.model';
+import { TextQuestion } from 'src/app/models/text-question.model';
 import { GlobalValuesService } from 'src/app/services/global-values.service';
 import { QuestionsService } from 'src/app/services/questions.service';
 
@@ -18,17 +17,27 @@ import { QuestionsService } from 'src/app/services/questions.service';
   templateUrl: './text-question.component.html',
   styleUrls: ['./text-question.component.css'],
 })
-export class TextQuestionComponent implements OnInit {
+export class TextQuestionComponent implements OnInit, OnChanges {
+  //#region Inputs and Outputs
   @Input() textQuestionInfo: TextQuestion;
   @Output() textChanged = new EventEmitter<TextQuestion>();
+  //#endregion
 
+  //#region Public properties
   isMultiline = false;
-  isRequired = false;
-  currentTextQuestion: TextQuestion;
   questionForm: FormGroup;
+  //#endregion
 
-  constructor(private globalValuesService: GlobalValuesService,
-              private questionsService: QuestionsService) {
+  //#region Private properties
+  private isRequired = false;
+  private currentTextQuestion: TextQuestion;
+  //#endregion
+
+  //#region Lifecycle hooks
+  constructor(
+    private globalValuesService: GlobalValuesService,
+    private questionsService: QuestionsService
+  ) {
     // Deep copy
     this.textQuestionInfo = JSON.parse(
       JSON.stringify(this.globalValuesService.DEFAULT_TEXT_QUESTION)
@@ -51,15 +60,23 @@ export class TextQuestionComponent implements OnInit {
     this.updateQuestion(this.currentTextQuestion);
     this.questionsService.isFormValid.next(this.questionForm.valid);
   }
+  //#endregion
 
-  updateQuestion(question: TextQuestion) {
+  //#region Private methods
+
+  /**
+   * Assigns the current question (including the user's previous answer(s) to that) to the form
+   * @param question The question which should be assigned
+   */
+  private updateQuestion(question: TextQuestion) : void {
     this.isMultiline = question.multiline as boolean;
     this.isRequired = question.required;
     const previousAnswer = question.answer;
     this.questionForm.setControl('userAnswer', new FormControl(previousAnswer));
-    if(this.isRequired) {
+    if (this.isRequired) {
       this.questionForm.get('userAnswer')?.setValidators(Validators.required);
       this.questionForm.updateValueAndValidity();
     }
   }
+  //#endregion
 }

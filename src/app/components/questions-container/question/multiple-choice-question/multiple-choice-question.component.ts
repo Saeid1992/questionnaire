@@ -5,7 +5,7 @@ import {
   OnChanges,
   OnInit,
   Output,
-  SimpleChanges
+  SimpleChanges,
 } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import {
@@ -23,21 +23,29 @@ import { ValidateFormAsync } from 'src/app/validators/multiple-choice-question.v
   styleUrls: ['./multiple-choice-question.component.css'],
 })
 export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
+  //#region Inputs and Outputs
   @Input() multipleChoiceQuestionInfo: MultipleChoiceQuestion;
   @Output() selectionChanged = new EventEmitter<MultipleChoiceQuestion>();
+  //#endregion
 
-  currentMultipleChoiceQuestion: MultipleChoiceQuestion;
+  //#region Public properties
   initialChoices: Choice[] = [];
-  selectedItemIndex: number;
   isMultipleAnswerAllowed = false;
   questionFormSingle: FormGroup;
-  questionFormContainer: FormGroup;
-  questionFormMultiple :FormGroup;
-  get options(): FormArray {
+  questionFormMultiple: FormGroup;
+  // questionFormMultipleAnswer: FormArray;
+  //#endregion
+
+  //#region Private properties
+  private currentMultipleChoiceQuestion: MultipleChoiceQuestion;
+  private selectedItemIndex: number;
+  private questionFormContainer: FormGroup;
+  private get options(): FormArray {
     return this.questionFormContainer.get('options') as FormArray;
   }
-  // questionFormMultipleAnswer: FormArray;
+  //#endregion
 
+  //#region Lifecycle hooks
   constructor(
     private globalValuesService: GlobalValuesService,
     private questionsService: QuestionsService
@@ -55,7 +63,6 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.questionFormSingle.valueChanges.subscribe((formValue) => {
-      console.log(formValue);
       this.resetFormValue();
       this.currentMultipleChoiceQuestion.choices = this.initialChoices;
       this.selectedItemIndex =
@@ -73,7 +80,6 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
     });
 
     this.questionFormMultiple.valueChanges.subscribe((formValue) => {
-      console.log(formValue);
       this.currentMultipleChoiceQuestion.choices = this.initialChoices;
       this.currentMultipleChoiceQuestion.choices.forEach((ch) => {
         ch.selected = formValue[ch.label];
@@ -82,20 +88,25 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
     });
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    console.log(changes);
+  ngOnChanges(changes: SimpleChanges): void {
     this.currentMultipleChoiceQuestion =
       changes.multipleChoiceQuestionInfo.currentValue;
     this.assignQuestion(this.currentMultipleChoiceQuestion);
     // this.updateValidators(this.currentMultipleChoiceQuestion);
   }
+  //#endregion
 
-  assignQuestion(question: MultipleChoiceQuestion): void {
+  //#region Private methods
+
+  /**
+   * Assigns the current question (including the user's previous answer(s) to that) to the form
+   * @param question The question which should be assigned
+   */
+  private assignQuestion(question: MultipleChoiceQuestion): void {
     let previousAnswer: Choice | undefined;
     this.isMultipleAnswerAllowed = question.multiple as boolean;
     this.initialChoices = JSON.parse(JSON.stringify(question.choices));
     previousAnswer = this.initialChoices.find((ch) => ch.selected);
-    console.log(this.questionFormSingle);
     switch (this.isMultipleAnswerAllowed) {
       case true:
         this.questionFormContainer.setControl('options', new FormArray([]));
@@ -105,7 +116,6 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
             new FormControl(this.initialChoices[i].selected)
           );
         }
-        console.log(this.questionFormMultiple);
         this.options.push(this.questionFormMultiple);
         break;
       case false:
@@ -122,7 +132,11 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
     }
   }
 
-  updateValidators(question: MultipleChoiceQuestion): void {
+  /**
+   * Updates the validation policies of the question
+   * @param question The current question
+   */
+  private updateValidators(question: MultipleChoiceQuestion): void {
     if (question.required) {
       // this.questionFormSingle.setValidators(ValidateFormAsync);
       this.questionFormSingle.setAsyncValidators(ValidateFormAsync());
@@ -131,9 +145,13 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
     }
   }
 
-  resetFormValue(): void {
+  /**
+   * Sets the question's choices to the initial values (before assigning the previous answer to it)
+   */
+  private resetFormValue(): void {
     this.currentMultipleChoiceQuestion.choices.forEach((ch) => {
       ch.selected = false;
     });
   }
+  //#endregion
 }

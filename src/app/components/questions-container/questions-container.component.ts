@@ -13,28 +13,30 @@ import { Router } from '@angular/router';
   styleUrls: ['./questions-container.component.css'],
 })
 export class QuestionsContainerComponent implements OnInit {
-  questionnaire: Questionnaire;
+  //#region Public properties
   title = '';
   description = '';
-  allQuestions: Array<TextQuestion | MultipleChoiceQuestion>;
-  firstQuestionIndex = 0;
-  lastQuestionIndex = 0;
-  previous = '';
-  next = '';
-  currentQuestionType = QuestionType.Text;
   currentQuestion: TextQuestion | MultipleChoiceQuestion;
   isFirstQuestion = true;
   isLastQuestion = false;
-  formerQuestionsIndex: number[] = [];
-  previousQuestionSymbol = '<';
-  nextQuestionSymbol = '>';
-  resultPageUrl = '';
   passedQuestions = 0;
   totalQuestions = 0;
-  toNext = true;
-  isValid!: boolean;
-  animationType = '';
+  //#endregion
 
+  //#region Private properties
+  private questionnaire: Questionnaire;
+  private allQuestions: Array<TextQuestion | MultipleChoiceQuestion>;
+  private firstQuestionIndex = 0;
+  private lastQuestionIndex = 0;
+  private previous = '';
+  private next = '';
+  private formerQuestionsIndex: number[] = [];
+  private resultPageUrl = '';
+  private isValid!: boolean;
+  private animationType = '';
+  //#endregion
+
+  //#region Lifecycle hooks
   constructor(
     private questionsService: QuestionsService,
     private globalValuesService: GlobalValuesService,
@@ -54,29 +56,16 @@ export class QuestionsContainerComponent implements OnInit {
       this.onQuestionChanged(direction);
     });
   }
+  //#endregion
 
-  private getDataFromFile(): void {
-    this.questionsService.getAllQuestions().subscribe((data: Questionnaire) => {
-      this.questionnaire = data;
-      this.title = this.questionsService.questionnaireTitle;
-      this.description = data.description;
-      this.questionsService.questionsWithAnswers = JSON.parse(
-        JSON.stringify(this.questionnaire.questions)
-      );
-      this.totalQuestions = this.questionsService.questionsWithAnswers.length;
-      this.lastQuestionIndex = this.totalQuestions - 1;
-      this.startQuestionnaire();
-    });
-  }
+  //#region Public methods
 
-  private startQuestionnaire(): void {
-    let firstQuestion =
-      this.questionsService.questionsWithAnswers[this.firstQuestionIndex];
-    this.currentQuestion = firstQuestion;
-  }
-
-  onQuestionChanged(changeDirection: string) {
-    console.log(changeDirection);
+  /**
+   * Gets triggered whenever the user navigates to the previous or the next question.
+   * (Also gets triggered once the user answers a multiple choice question which could have one answer)
+   * @param changeDirection The direction of to which the navigation should occur
+   */
+  onQuestionChanged(changeDirection: string): void {
     switch (changeDirection) {
       case this.previous:
         this.animationType = 'leave-from-right';
@@ -92,14 +81,16 @@ export class QuestionsContainerComponent implements OnInit {
           this.animationType = 'enter-from-right';
         }, 200);
         break;
-      default:
-        break;
     }
   }
 
+  /**
+   * Navigates to previous question
+   * @param currQuestion The currently shown question
+   */
   navigateToPreviousQuestion(
     currQuestion: TextQuestion | MultipleChoiceQuestion
-  ) {
+  ): void {
     let index = this.questionsService.questionsWithAnswers.findIndex(
       (question) => question.identifier === currQuestion.identifier
     );
@@ -122,7 +113,13 @@ export class QuestionsContainerComponent implements OnInit {
     this.isLastQuestion = false;
   }
 
-  navigateToNextQuestion(currQuestion: TextQuestion | MultipleChoiceQuestion) {
+  /**
+   * Navigates to next question
+   * @param currQuestion The currently shown question
+   */
+  navigateToNextQuestion(
+    currQuestion: TextQuestion | MultipleChoiceQuestion
+  ): void {
     const questionId = currQuestion.identifier;
     let userAnswer = '';
     let index = this.questionsService.questionsWithAnswers.findIndex(
@@ -157,6 +154,67 @@ export class QuestionsContainerComponent implements OnInit {
     this.isFirstQuestion = false;
   }
 
+  /**
+   * Navigates to the result page
+   */
+  navigateToResultPage(): void {
+    let secretKey = this.questionsService.resultsKey;
+    this.router.navigate(['/result', secretKey]);
+  }
+
+  /**
+   * Determines the transition type to be applied
+   * @returns Animation type
+   */
+  specifyClass(): string {
+    return this.animationType;
+  }
+
+  /**
+   * Calculates the progress of the questionnaire
+   * @returns The computed percentage
+   */
+  calculatePercentageOfCompletion(): string {
+    let percentageOfCompletion = Math.round(
+      (this.passedQuestions / this.totalQuestions) * 100
+    );
+    return percentageOfCompletion + '%';
+  }
+  //#endregion
+
+  //#region Private methods
+
+  /**
+   * Subscribes to the questionnaire data provided by the service
+   */
+  private getDataFromFile(): void {
+    this.questionsService.getAllQuestions().subscribe((data: Questionnaire) => {
+      this.questionnaire = data;
+      this.title = this.questionsService.questionnaireTitle;
+      this.description = data.description;
+      this.questionsService.questionsWithAnswers = JSON.parse(
+        JSON.stringify(this.questionnaire.questions)
+      );
+      this.totalQuestions = this.questionsService.questionsWithAnswers.length;
+      this.lastQuestionIndex = this.totalQuestions - 1;
+      this.startQuestionnaire();
+    });
+  }
+
+  /**
+   * Assigns the first question and starts the process
+   */
+  private startQuestionnaire(): void {
+    let firstQuestion =
+      this.questionsService.questionsWithAnswers[this.firstQuestionIndex];
+    this.currentQuestion = firstQuestion;
+  }
+
+  /**
+   * Retrieves the user's answer to a question which contains a conditional jump
+   * @param question The intended question
+   * @returns The answer to the given question
+   */
   private findUserAnswer(
     question: TextQuestion | MultipleChoiceQuestion
   ): string {
@@ -175,12 +233,16 @@ export class QuestionsContainerComponent implements OnInit {
           multipleChoiceQuestion.choices.find((item) => item.selected)?.value ??
           multipleChoiceQuestion.choices[0].value;
         break;
-      default:
-        break;
     }
     return answer;
   }
 
+  /**
+   * Searches to find the ID of the next question when the current question containes a conditional jump
+   * @param question The intended question
+   * @param answer The answer to the corresponding question
+   * @returns The ID of the next question which should be displayed
+   */
   private findNextQuestionId(
     question: TextQuestion | MultipleChoiceQuestion,
     answer: string
@@ -191,22 +253,5 @@ export class QuestionsContainerComponent implements OnInit {
     )?.targetQuestionId as string;
     return nextQuestionId;
   }
-
-  navigateToResultPage() {
-    let secretKey = this.questionsService.resultsKey;
-    // this.router.navigateByUrl(`/result`);
-    console.log(secretKey);
-    this.router.navigate(['/result',secretKey]);
-  }
-
-  specifyClass() {
-    return this.animationType;
-  }
-
-  calculatePercentageOfCompletion(): string {
-    let percentageOfCompletion = Math.round(
-      (this.passedQuestions / this.totalQuestions) * 100
-    );
-    return percentageOfCompletion + '%';
-  }
+  //#endregion
 }

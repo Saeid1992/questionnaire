@@ -11,6 +11,7 @@
   border-bottom: 4px solid #004080;
   font-size: 1.2rem;
 }
+
 @media (min-width: 45rem) {
   .header-container {
     font-size: 2rem;

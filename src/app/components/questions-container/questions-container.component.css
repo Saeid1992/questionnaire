@@ -52,7 +52,6 @@ progress[value] {
 .description-container {
   text-align: center;
   max-width: 40rem;
-  /* margin-top: 2rem; */
   padding: 1rem;
   border: 1px solid black;
   height: 4rem;

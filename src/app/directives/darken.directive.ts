@@ -3,12 +3,9 @@ import { Directive, ElementRef, HostListener, OnInit, Renderer2 } from "@angular
 @Directive({
   selector: '[appDarkenDirective]'
 })
-export class DarkenDirective implements OnInit  {
+export class DarkenDirective  {
   constructor(private elementRef: ElementRef,private renderer: Renderer2){
 
-  }
-
-  ngOnInit() {
   }
 
   @HostListener('mouseenter') mouseover (eventData: Event) {

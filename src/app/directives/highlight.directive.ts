@@ -3,12 +3,9 @@ import { Directive, ElementRef, HostListener, OnInit, Renderer2 } from "@angular
 @Directive({
   selector: '[appHighlightDirective]'
 })
-export class HighlightDirective implements OnInit  {
+export class HighlightDirective {
   constructor(private elementRef: ElementRef,private renderer: Renderer2){
 
-  }
-
-  ngOnInit() {
   }
 
   @HostListener('mouseenter') mouseover (eventData: Event) {
