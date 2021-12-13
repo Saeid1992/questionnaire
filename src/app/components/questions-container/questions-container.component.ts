@@ -1,4 +1,4 @@
-import { AfterContentInit, AfterViewChecked, ChangeDetectorRef, Component, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { QuestionsService } from 'src/app/services/questions.service';
 import { Questionnaire } from 'src/app/models/questionnaire.model';
 import { MultipleChoiceQuestion } from 'src/app/models/multiple-choice-question';

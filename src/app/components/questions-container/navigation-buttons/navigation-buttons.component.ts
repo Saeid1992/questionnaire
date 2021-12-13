@@ -1,9 +1,6 @@
 import {
   Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
+  Input
 } from '@angular/core';
 import { GlobalValuesService } from 'src/app/services/global-values.service';
 import { QuestionsService } from 'src/app/services/questions.service';
@@ -13,7 +10,7 @@ import { QuestionsService } from 'src/app/services/questions.service';
   templateUrl: './navigation-buttons.component.html',
   styleUrls: ['./navigation-buttons.component.css'],
 })
-export class NavigationButtonsComponent implements OnChanges {
+export class NavigationButtonsComponent {
   //#region Inputs and Outputs
   @Input() isFirst = true;
   @Input() isLast = false;
@@ -26,10 +23,6 @@ export class NavigationButtonsComponent implements OnChanges {
   previousQuestion = '';
   //#endregion
 
-  //#region Private Properties
-  // Just for testing purposes
-  first = false;
-  last = true;
   //#endregion
 
   //#region Lifecycle hooks
@@ -39,11 +32,6 @@ export class NavigationButtonsComponent implements OnChanges {
   ) {
     this.nextQuestion = this.globalValuesService.NEXT_QUESTION_TEXT;
     this.previousQuestion = this.globalValuesService.PREVIOUS_QUESTION_TEXT;
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    this.first = this.isFirst;
-    this.last = this.isLast;
   }
 
   //#endregion
