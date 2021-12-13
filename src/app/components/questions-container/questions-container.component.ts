@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterContentInit, AfterViewChecked, ChangeDetectorRef, Component, OnInit, SimpleChanges } from '@angular/core';
 import { QuestionsService } from 'src/app/services/questions.service';
 import { Questionnaire } from 'src/app/models/questionnaire.model';
 import { MultipleChoiceQuestion } from 'src/app/models/multiple-choice-question';
@@ -6,6 +6,7 @@ import { TextQuestion } from 'src/app/models/text-question.model';
 import { QuestionType, SimpleJump } from 'src/app/models/question.model';
 import { GlobalValuesService } from 'src/app/services/global-values.service';
 import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-questions-container',
@@ -34,13 +35,15 @@ export class QuestionsContainerComponent implements OnInit {
   private resultPageUrl = '';
   private isValid!: boolean;
   private animationType = '';
+  private resultPage = '';
   //#endregion
 
   //#region Lifecycle hooks
   constructor(
     private questionsService: QuestionsService,
     private globalValuesService: GlobalValuesService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {
     this.questionnaire = {} as Questionnaire;
     this.allQuestions = [];
@@ -48,14 +51,20 @@ export class QuestionsContainerComponent implements OnInit {
     this.resultPageUrl = globalValuesService.RESULT_PAGE;
     this.previous = this.globalValuesService.PREVIOUS_QUESTION_TEXT;
     this.next = this.globalValuesService.NEXT_QUESTION_TEXT;
+    this.resultPage = this.globalValuesService.RESULT_PAGE;
   }
 
   ngOnInit(): void {
     this.getDataFromFile();
     this.questionsService.questionChanged.subscribe((direction) => {
+      console.log(direction);
       this.onQuestionChanged(direction);
     });
   }
+
+  // ngAfterViewChecked(): void {
+  //   this.cdr.detectChanges();
+  // }
   //#endregion
 
   //#region Public methods
@@ -72,14 +81,15 @@ export class QuestionsContainerComponent implements OnInit {
         setTimeout(() => {
           this.navigateToPreviousQuestion(this.currentQuestion);
           this.animationType = 'enter-from-left';
-        }, 200);
+        }, 100);
         break;
       case this.next:
+        console.log('to next');
         this.animationType = 'leave-from-left';
         setTimeout(() => {
           this.navigateToNextQuestion(this.currentQuestion);
           this.animationType = 'enter-from-right';
-        }, 200);
+        }, 100);
         break;
     }
   }
@@ -159,7 +169,7 @@ export class QuestionsContainerComponent implements OnInit {
    */
   navigateToResultPage(): void {
     let secretKey = this.questionsService.resultsKey;
-    this.router.navigate(['/result', secretKey]);
+    this.router.navigate([this.resultPage, secretKey]);
   }
 
   /**

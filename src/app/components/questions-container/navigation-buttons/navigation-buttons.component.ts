@@ -1,4 +1,6 @@
 import {
+  AfterViewChecked,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -20,8 +22,7 @@ export class NavigationButtonsComponent implements OnInit, OnChanges {
   @Input() isFirst = true;
   @Input() isLast = false;
   // @Input() isDisabled = true;
-  // isDisabled = true;
-  // @Output() questionChanged = new EventEmitter<string>();
+  isDisabled = true;
   //#endregion
 
   //#region Public properties
@@ -31,26 +32,33 @@ export class NavigationButtonsComponent implements OnInit, OnChanges {
   previousQuestion = '';
   //#endregion
 
+  //#region Private Properties
+  // Just for testing purposes
+  first = false;
+  last = true;
+  //#endregion
+
   //#region Lifecycle hooks
   constructor(
     private globalValuesService: GlobalValuesService,
-    private questionsService: QuestionsService
+    private questionsService: QuestionsService,
   ) {
     this.nextQuestion = this.globalValuesService.NEXT_QUESTION_TEXT;
     this.previousQuestion = this.globalValuesService.PREVIOUS_QUESTION_TEXT;
   }
 
   ngOnInit(): void {
-    console.log('Navigation');
-    // this.questionsService.isFormValid.subscribe((isValid) => {
-    //   this.isDisabled = !isValid;
-    //   console.log(isValid);
-    // });
+    this.questionsService.isFormValid.subscribe((isValid) => {
+      console.log(isValid);
+      this.isDisabled = !isValid;
+    });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
+  ngOnChanges(changes: SimpleChanges) {
+    this.first = this.isFirst;
+    this.last = this.isLast;
   }
+
   //#endregion
 
   //#region Public methods
@@ -70,4 +78,6 @@ export class NavigationButtonsComponent implements OnInit, OnChanges {
     }
   }
   //#endregion
+
+
 }

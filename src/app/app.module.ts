@@ -17,7 +17,6 @@ import { ResultComponent } from './components/result/result.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderComponent } from './components/header/header.component';
 import { DisplayFinalAnswerPipe } from './pipes/final-answers.pipe';
-import { FooterComponent } from './components/footer/footer.component';
 import { DarkenDirective } from './directives/darken.directive';
 import { NavigationButtonsComponent } from './components/questions-container/navigation-buttons/navigation-buttons.component';
 import { HighlightDirective } from './directives/highlight.directive';
@@ -33,7 +32,6 @@ import { HighlightDirective } from './directives/highlight.directive';
     QuestionComponent,
     ResultComponent,
     HeaderComponent,
-    FooterComponent,
     NavigationButtonsComponent,
 
     DarkenDirective,

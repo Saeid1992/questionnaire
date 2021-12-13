@@ -21,7 +21,9 @@
     </div>
     <br />
     <div class="result-button-container">
-      <button (click)="navigateToResultPage()" *ngIf="isLastQuestion">
+      <button (click)="navigateToResultPage()"
+              *ngIf="isLastQuestion"
+              >
         Antworten ansehen
       </button>
     </div>
@@ -29,7 +31,4 @@
       <p>{{ description }}</p>
     </div>
   </div>
-  <!-- <footer>
-    <app-footer class="footer"></app-footer>
-  </footer> -->
 </div>

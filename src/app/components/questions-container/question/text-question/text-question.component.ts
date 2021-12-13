@@ -55,10 +55,9 @@ export class TextQuestionComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
     this.currentTextQuestion = changes.textQuestionInfo.currentValue;
     this.updateQuestion(this.currentTextQuestion);
-    this.questionsService.isFormValid.next(this.questionForm.valid);
+    this.questionsService.isFormValid.emit(this.questionForm.valid);
   }
   //#endregion
 

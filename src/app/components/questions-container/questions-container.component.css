@@ -57,29 +57,23 @@ progress[value] {
   height: 4rem;
 }
 
-footer {
-  width: 100%;
-  position: absolute;
-  bottom: 0;
-}
-
 .enter-from-right {
-  animation-duration: 400ms;
+  animation-duration: 200ms;
   animation-name: enterfromright;
 }
 
 .leave-from-left {
-  animation-duration: 400ms;
+  animation-duration: 200ms;
   animation-name: leavefromleft;
 }
 
 .leave-from-right {
-  animation-duration: 400ms;
+  animation-duration: 200ms;
   animation-name: leavefromright;
 }
 
 .enter-from-left {
-  animation-duration: 400ms;
+  animation-duration: 200ms;
   animation-name: enterfromleft;
 }
 
