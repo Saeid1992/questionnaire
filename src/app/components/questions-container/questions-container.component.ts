@@ -6,6 +6,7 @@ import { TextQuestion } from 'src/app/models/text-question.model';
 import { QuestionType, SimpleJump } from 'src/app/models/question.model';
 import { GlobalValuesService } from 'src/app/services/global-values.service';
 import { Router } from '@angular/router';
+import { Direction } from 'src/app/models/direction-change.enum';
 
 
 @Component({
@@ -94,6 +95,7 @@ export class QuestionsContainerComponent implements OnInit {
   navigateToPreviousQuestion(
     currQuestion: TextQuestion | MultipleChoiceQuestion
   ): void {
+    this.questionsService.changeDirection = Direction.Previous;
     let index = this.questionsService.questionsWithAnswers.findIndex(
       (question) => question.identifier === currQuestion.identifier
     );
@@ -123,6 +125,7 @@ export class QuestionsContainerComponent implements OnInit {
   navigateToNextQuestion(
     currQuestion: TextQuestion | MultipleChoiceQuestion
   ): void {
+    this.questionsService.changeDirection = Direction.Next;
     const questionId = currQuestion.identifier;
     let userAnswer = '';
     let index = this.questionsService.questionsWithAnswers.findIndex(

@@ -8,6 +8,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { Direction } from 'src/app/models/direction-change.enum';
 import {
   Choice,
   MultipleChoiceQuestion,
@@ -36,6 +37,7 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
 
   //#region Private properties
   private currentMultipleChoiceQuestion: MultipleChoiceQuestion;
+  private prevAnswer: string | undefined;
   private selectedItemIndex: number;
   private questionFormContainer: FormGroup;
   private get options(): FormArray {
@@ -61,17 +63,20 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.questionFormSingle.valueChanges.subscribe((formValue) => {
-        this.resetFormValue();
-        this.currentMultipleChoiceQuestion.choices = this.initialChoices;
-        this.selectedItemIndex =
-          this.currentMultipleChoiceQuestion.choices.findIndex(
-            (ch) => ch.value === formValue.choice
-          );
-        if (this.selectedItemIndex > -1) {
-          this.currentMultipleChoiceQuestion.choices[
-            this.selectedItemIndex
-          ].selected = true;
-          this.selectionChanged.emit(this.currentMultipleChoiceQuestion);
+        this.prevAnswer = this.getPreviousAnswer();
+        if(!Array.isArray(formValue.choice) && formValue.choice !== this.prevAnswer) {
+          this.resetFormValue();
+          this.selectedItemIndex =
+            this.currentMultipleChoiceQuestion.choices.findIndex(
+              (ch) => ch.value === formValue.choice
+            );
+          if (this.selectedItemIndex > -1) {
+            this.currentMultipleChoiceQuestion.choices[
+              this.selectedItemIndex
+            ].selected = true;
+            this.selectionChanged.emit(this.currentMultipleChoiceQuestion);
+            this.questionsService.questionChanged.emit(Direction.Next);
+          }
         }
     });
 
@@ -98,10 +103,8 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
    * @param question The question which should be assigned
    */
   private assignQuestion(question: MultipleChoiceQuestion): void {
-    let previousAnswer: Choice | undefined;
     this.isMultipleAnswerAllowed = question.multiple as boolean;
     this.initialChoices = JSON.parse(JSON.stringify(question.choices));
-    previousAnswer = this.initialChoices.find((ch) => ch.selected);
     switch (this.isMultipleAnswerAllowed) {
       case true:
         this.questionFormContainer.setControl('options', new FormArray([]));
@@ -118,14 +121,25 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
           'choice',
           new FormControl(this.initialChoices)
         );
-        if (previousAnswer) {
+
+        if (this.prevAnswer) {
           this.questionFormSingle.setValue({
-            choice: previousAnswer.value,
+            choice: this.prevAnswer,
           });
         }
         break;
     }
   }
+
+  /**
+   *
+   */
+
+   private getPreviousAnswer() : string | undefined {
+    let previousAnswer: Choice | undefined;
+    previousAnswer = this.initialChoices.find((ch) => ch.selected);
+    return previousAnswer?.value;
+   }
 
   /**
    * Sets the question's choices to the initial values (before assigning the previous answer to it)

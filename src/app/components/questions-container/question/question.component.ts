@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Direction } from 'src/app/models/direction-change.enum';
 import { MultipleChoiceQuestion } from 'src/app/models/multiple-choice-question';
 import { Question, QuestionType } from 'src/app/models/question.model';
 import { TextQuestion } from 'src/app/models/text-question.model';

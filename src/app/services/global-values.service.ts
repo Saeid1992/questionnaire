@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Direction } from '../models/direction-change.enum';
 import {
   Choice,
   MultipleChoiceQuestion,
@@ -42,8 +43,8 @@ export class GlobalValuesService {
   };
 
   MULTI_ANSWER_CONNECTOR = ' UND ';
-  NEXT_QUESTION_TEXT = 'next';
-  PREVIOUS_QUESTION_TEXT = 'previous';
+  NEXT_QUESTION_TEXT = Direction.Next;
+  PREVIOUS_QUESTION_TEXT = Direction.Previous;
   //#endregion
 
   //#region Lifecycle hooks

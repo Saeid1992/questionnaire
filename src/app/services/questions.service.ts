@@ -11,6 +11,7 @@ import { ApiService } from './api-service';
 import { TextQuestion } from '../models/text-question.model';
 import { MultipleChoiceQuestion } from '../models/multiple-choice-question';
 import { Jump, QuestionType, SimpleJump } from '../models/question.model';
+import { Direction } from '../models/direction-change.enum';
 
 @Injectable()
 export class QuestionsService {
@@ -18,6 +19,7 @@ export class QuestionsService {
   questionChanged = new EventEmitter<string>();
   questionsWithAnswers: Array<TextQuestion | MultipleChoiceQuestion>;
   questionnaireTitle = '';
+  changeDirection: Direction.Next | Direction.Previous | '';
   resultsKey = '';
   //#endregion
   //#region Private properties
@@ -36,6 +38,7 @@ export class QuestionsService {
     this.questionsWithAnswers = [] as Array<
       TextQuestion | MultipleChoiceQuestion
     >;
+    this.changeDirection = '';
     this.generateResultKey();
   }
   //#endregion
