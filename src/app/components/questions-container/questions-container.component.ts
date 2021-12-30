@@ -21,19 +21,18 @@ export class QuestionsContainerComponent implements OnInit {
   currentQuestion: TextQuestion | MultipleChoiceQuestion;
   isFirstQuestion = true;
   isLastQuestion = false;
+  canProceedToResultPage!: boolean;
   passedQuestions = 0;
   totalQuestions = 0;
   //#endregion
 
   //#region Private properties
   private questionnaire: Questionnaire;
-  private allQuestions: Array<TextQuestion | MultipleChoiceQuestion>;
   private firstQuestionIndex = 0;
   private lastQuestionIndex = 0;
   private previous = '';
   private next = '';
   private formerQuestionsIndex: number[] = [];
-  private resultPageUrl = '';
   private animationType = '';
   private resultPage = '';
   //#endregion
@@ -45,9 +44,7 @@ export class QuestionsContainerComponent implements OnInit {
     private router: Router,
   ) {
     this.questionnaire = {} as Questionnaire;
-    this.allQuestions = [];
     this.currentQuestion = {} as TextQuestion; // or as MultipleChoiceQuestion
-    this.resultPageUrl = globalValuesService.RESULT_PAGE;
     this.previous = this.globalValuesService.PREVIOUS_QUESTION_TEXT;
     this.next = this.globalValuesService.NEXT_QUESTION_TEXT;
     this.resultPage = this.globalValuesService.RESULT_PAGE;
@@ -55,6 +52,9 @@ export class QuestionsContainerComponent implements OnInit {
 
   ngOnInit(): void {
     this.getDataFromFile();
+    this.questionsService.isLastQuestionValid.subscribe(isValid => {
+      this.canProceedToResultPage = isValid;
+    });
     this.questionsService.questionChanged.subscribe((direction) => {
       this.onQuestionChanged(direction);
     });
@@ -115,6 +115,7 @@ export class QuestionsContainerComponent implements OnInit {
     this.passedQuestions = previousQuestionRealIndex;
     this.currentQuestion =
       this.questionsService.questionsWithAnswers[previousQuestionRealIndex];
+    this.questionsService.isLastQuestion.next(false);
     this.isLastQuestion = false;
   }
 
@@ -136,6 +137,9 @@ export class QuestionsContainerComponent implements OnInit {
     let nextQuestionRealIndex = nextQuestionProbableIndex;
     if (index === this.lastQuestionIndex - 1) {
       this.isLastQuestion = true;
+      this.questionsService.isLastQuestion.next(true);
+    } else {
+      this.questionsService.isLastQuestion.next(false);
     }
     if (currQuestion.jumps.length > 0) {
       let skippedQuestions: Array<TextQuestion | MultipleChoiceQuestion> = [];

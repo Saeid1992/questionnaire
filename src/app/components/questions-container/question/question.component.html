@@ -1,15 +1,17 @@
 <div>
-  <p class="question-title">{{ headline }}</p>
+  <p class="question-title" [title]="description">{{ headline }}</p>
   <div>
     <div *ngIf="questionType === textQuestionType">
       <app-text-question
         [textQuestionInfo]="textQuestion"
+        [finalQuestion] = "isFinalQuestion"
         (textChanged)="onTextChanged($event)"
       ></app-text-question>
     </div>
     <div *ngIf="questionType === multipleChoiceQuestionType">
       <app-multiple-choice-question
         [multipleChoiceQuestionInfo]="multipleChoiceQuestion"
+        [finalQuestion] = "isFinalQuestion"
         (selectionChanged)="onSelectionChanged($event)"
       ></app-multiple-choice-question>
     </div>

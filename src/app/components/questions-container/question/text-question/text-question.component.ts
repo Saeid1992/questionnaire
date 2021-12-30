@@ -7,7 +7,7 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TextQuestion } from 'src/app/models/text-question.model';
 import { GlobalValuesService } from 'src/app/services/global-values.service';
 import { QuestionsService } from 'src/app/services/questions.service';
@@ -20,12 +20,16 @@ import { QuestionsService } from 'src/app/services/questions.service';
 export class TextQuestionComponent implements OnInit, OnChanges {
   //#region Inputs and Outputs
   @Input() textQuestionInfo: TextQuestion;
+  @Input() set finalQuestion(value: boolean) {
+    this.isFinalQs = value;
+  }
   @Output() textChanged = new EventEmitter<TextQuestion>();
   //#endregion
 
   //#region Public properties
   isMultiline = false;
   questionForm: FormGroup;
+  isFinalQs = false;
   //#endregion
 
   //#region Private properties
@@ -43,13 +47,19 @@ export class TextQuestionComponent implements OnInit, OnChanges {
       JSON.stringify(this.globalValuesService.DEFAULT_TEXT_QUESTION)
     );
     this.currentTextQuestion = this.textQuestionInfo;
-    this.questionForm = new FormGroup({}, { updateOn: 'blur' });
+    this.questionForm = new FormGroup({});
   }
 
   ngOnInit(): void {
     this.questionForm.valueChanges.subscribe((formValue) => {
-      this.currentTextQuestion.answer = formValue.userAnswer;
-      this.textChanged.emit(this.currentTextQuestion);
+        this.currentTextQuestion.answer = formValue.userAnswer;
+        this.textChanged.emit(this.currentTextQuestion);
+        if(this.isRequired) {
+          this.questionsService.isValid.emit(this.questionForm.valid);
+          if(this.isFinalQs) {
+            this.questionsService.isLastQuestionValid.next(this.questionForm.valid);
+          }
+        }
     });
   }
 
@@ -68,8 +78,18 @@ export class TextQuestionComponent implements OnInit, OnChanges {
   private updateQuestion(question: TextQuestion) : void {
     this.isMultiline = question.multiline as boolean;
     this.isRequired = question.required;
-    const previousAnswer = question.answer;
-    this.questionForm.setControl('userAnswer', new FormControl(previousAnswer));
+    const previousAnswer = question.answer?? null;
+    this.questionForm.setControl('userAnswer',
+                                 new FormControl(previousAnswer),
+                                 {emitEvent: false});
+    if(this.isRequired) {
+      this.questionForm.controls['userAnswer'].setValidators(Validators.required);
+      this.questionForm.controls['userAnswer'].updateValueAndValidity({emitEvent: false});
+      this.questionsService.isValid.emit(this.questionForm.valid);
+      if(this.isFinalQs) {
+        this.questionsService.isLastQuestionValid.next(this.questionForm.valid);
+      }
+    }
   }
   //#endregion
 }

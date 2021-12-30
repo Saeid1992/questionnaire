@@ -46,18 +46,4 @@ describe('QuestionsComponent', () => {
     debugElement = fixture.debugElement;
     questionsService = TestBed.inject(QuestionsService);
   });
-
-  // it('should create', () => {
-  //   expect(component).toBeTruthy();
-  // });
-
-  // it('should get data from the json file', () => {
-
-  // });
-
-
-  // it('should call the "navigateToNextQuestion" function', () => {
-
-  // });
-
 });

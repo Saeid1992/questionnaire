@@ -1,5 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { Direction } from 'src/app/models/direction-change.enum';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { MultipleChoiceQuestion } from 'src/app/models/multiple-choice-question';
 import { Question, QuestionType } from 'src/app/models/question.model';
 import { TextQuestion } from 'src/app/models/text-question.model';
@@ -11,7 +10,7 @@ import { QuestionsService } from 'src/app/services/questions.service';
   templateUrl: './question.component.html',
   styleUrls: ['./question.component.css'],
 })
-export class QuestionComponent implements OnChanges {
+export class QuestionComponent implements OnInit, OnChanges {
   //#region Inputs and Outputs
   @Input() question: Question;
   //#endregion
@@ -23,7 +22,9 @@ export class QuestionComponent implements OnChanges {
   textQuestionType = '';
   multipleChoiceQuestionType = '';
   headline = '';
+  description = '';
   required = false;
+  isFinalQuestion = false;
   //#endregion
 
   //#region Lifecycle hooks
@@ -42,11 +43,18 @@ export class QuestionComponent implements OnChanges {
     ) as Question;
   }
 
+  ngOnInit(): void {
+    this.questionsService.isLastQuestion.subscribe(isLast => {
+      this.isFinalQuestion = isLast;
+    });
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (!changes.question.isFirstChange()) {
       this.question = changes.question.currentValue;
       this.questionType = this.question.question_type;
       this.headline = this.question.headline;
+      this.description = this.question.description?? 'No description';
       this.required = this.question.required;
       switch (this.questionType) {
         case QuestionType.Text:

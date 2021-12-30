@@ -23,7 +23,7 @@
     <div class="result-button-container">
       <button (click)="navigateToResultPage()"
               *ngIf="isLastQuestion"
-              >
+              [disabled]="!canProceedToResultPage">
         Antworten ansehen
       </button>
     </div>

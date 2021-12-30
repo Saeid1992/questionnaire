@@ -5,7 +5,7 @@ import {
   Questionnaire,
   QuestionnaireBase,
 } from '../models/questionnaire.model';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ApiService } from './api-service';
 import { TextQuestion } from '../models/text-question.model';
@@ -21,6 +21,9 @@ export class QuestionsService {
   questionnaireTitle = '';
   changeDirection: Direction.Next | Direction.Previous | '';
   resultsKey = '';
+  isValid = new EventEmitter<boolean>();
+  isLastQuestion = new Subject<boolean>();
+  isLastQuestionValid = new Subject<boolean>();
   //#endregion
   //#region Private properties
   private url = '';

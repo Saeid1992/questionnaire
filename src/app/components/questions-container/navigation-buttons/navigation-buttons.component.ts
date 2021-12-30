@@ -1,6 +1,7 @@
 import {
   Component,
-  Input
+  Input,
+  OnInit
 } from '@angular/core';
 import { GlobalValuesService } from 'src/app/services/global-values.service';
 import { QuestionsService } from 'src/app/services/questions.service';
@@ -10,17 +11,18 @@ import { QuestionsService } from 'src/app/services/questions.service';
   templateUrl: './navigation-buttons.component.html',
   styleUrls: ['./navigation-buttons.component.css'],
 })
-export class NavigationButtonsComponent {
+export class NavigationButtonsComponent implements OnInit {
   //#region Inputs and Outputs
   @Input() isFirst = true;
   @Input() isLast = false;
   //#endregion
 
   //#region Public properties
-  symbolOfPreviousQuestion = '<';
-  symbolOfNextQuestion = '>';
+  symbolOfPreviousQuestion = this.globalValuesService.PREVIOUS_QUESTION_SYMBOL;
+  symbolOfNextQuestion = this.globalValuesService.NEXT_QUESTION_SYMBOL;
   nextQuestion = '';
   previousQuestion = '';
+  isNotValid = false;
   //#endregion
 
   //#endregion
@@ -32,6 +34,12 @@ export class NavigationButtonsComponent {
   ) {
     this.nextQuestion = this.globalValuesService.NEXT_QUESTION_TEXT;
     this.previousQuestion = this.globalValuesService.PREVIOUS_QUESTION_TEXT;
+  }
+
+  ngOnInit() : void {
+    this.questionsService.isValid.subscribe(isFormValid => {
+      this.isNotValid = !isFormValid;
+    });
   }
 
   //#endregion

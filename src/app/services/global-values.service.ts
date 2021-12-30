@@ -45,6 +45,8 @@ export class GlobalValuesService {
   MULTI_ANSWER_CONNECTOR = ' UND ';
   NEXT_QUESTION_TEXT = Direction.Next;
   PREVIOUS_QUESTION_TEXT = Direction.Previous;
+  NEXT_QUESTION_SYMBOL = '>';
+  PREVIOUS_QUESTION_SYMBOL = '<';
   //#endregion
 
   //#region Lifecycle hooks
