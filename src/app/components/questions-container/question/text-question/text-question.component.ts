@@ -89,6 +89,8 @@ export class TextQuestionComponent implements OnInit, OnChanges {
       if(this.isFinalQs) {
         this.questionsService.isLastQuestionValid.next(this.questionForm.valid);
       }
+    } else {
+      this.questionsService.isLastQuestionValid.next(this.questionForm.valid);
     }
   }
   //#endregion

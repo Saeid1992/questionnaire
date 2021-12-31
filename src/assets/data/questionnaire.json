@@ -476,7 +476,7 @@
         "identifier": "date_22039590",
         "headline": "Was wäre Dein Wunschtermin für den Beginn der Privathaftpflichtversicherung?",
         "description": null,
-        "required": true,
+        "required": false,
         "multiline": "false",
         "jumps": []
       },
@@ -485,7 +485,7 @@
         "identifier": "textarea_12110979",
         "headline": "Hast Du noch weitere Informationen oder Anmerkungen für uns?",
         "description": null,
-        "required": true,
+        "required": false,
         "multiline": "true",
         "jumps": []
       }

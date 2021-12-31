@@ -79,13 +79,17 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
           this.currentMultipleChoiceQuestion.choices.findIndex(
             (ch) => ch.value === formValue.choice
           );
-        if (this.selectedItemIndex > -1) {
-          this.currentMultipleChoiceQuestion.choices[
-            this.selectedItemIndex
-          ].selected = true;
-          this.selectionChanged.emit(this.currentMultipleChoiceQuestion);
-          this.questionsService.questionChanged.emit(Direction.Next);
-          this.questionsService.isValid.emit(this.questionFormSingle.valid);
+
+        this.currentMultipleChoiceQuestion.choices[
+          this.selectedItemIndex
+        ].selected = true;
+        this.selectionChanged.emit(this.currentMultipleChoiceQuestion);
+        this.questionsService.questionChanged.emit(Direction.Next);
+        this.questionsService.isValid.emit(this.questionFormSingle.valid);
+        if (this.isFinalQs) {
+          this.questionsService.isLastQuestionValid.next(
+            this.questionFormSingle.valid
+          );
         }
       }
     });
@@ -95,10 +99,17 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
         ch.selected = formValue[ch.label];
       });
       this.selectionChanged.emit(this.currentMultipleChoiceQuestion);
-      if(this.currentMultipleChoiceQuestion.required) {
-        this.questionFormContainer.setValidators(RequiredMultipleAnswerForMultipleChoice);
+      if (this.currentMultipleChoiceQuestion.required) {
+        this.questionFormContainer.setValidators(
+          RequiredMultipleAnswerForMultipleChoice
+        );
         this.questionFormContainer.updateValueAndValidity();
         this.questionsService.isValid.emit(this.questionFormContainer.valid);
+        if (this.isFinalQs) {
+          this.questionsService.isLastQuestionValid.next(
+            this.questionFormMultiple.valid
+          );
+        }
       }
     });
   }
@@ -129,10 +140,21 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
           );
         }
         this.options.push(this.questionFormMultiple);
-        if(question.required) {
-          this.questionFormContainer.setValidators(RequiredMultipleAnswerForMultipleChoice);
+        if (question.required) {
+          this.questionFormContainer.setValidators(
+            RequiredMultipleAnswerForMultipleChoice
+          );
           this.questionFormContainer.updateValueAndValidity();
           this.questionsService.isValid.emit(this.questionFormContainer.valid);
+          if (this.isFinalQs) {
+            this.questionsService.isLastQuestionValid.next(
+              this.questionFormMultiple.valid
+            );
+          } else {
+            this.questionsService.isLastQuestionValid.next(
+              this.questionFormMultiple.valid
+            );
+          }
         }
         break;
       case false:
@@ -146,6 +168,15 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
           );
           this.questionFormSingle.updateValueAndValidity();
           this.questionsService.isValid.emit(this.questionFormSingle.valid);
+          if (this.isFinalQs) {
+            this.questionsService.isLastQuestionValid.next(
+              this.questionFormMultiple.valid
+            );
+          }
+        } else {
+          this.questionsService.isLastQuestionValid.next(
+            this.questionFormMultiple.valid
+          );
         }
 
         if (this.prevAnswer) {
