@@ -5,7 +5,6 @@ export function RequiredMultipleAnswerForMultipleChoice(
 ): { [key: string]: boolean } | null {
   let optionsFormArray = control.get('options') as FormArray;
   let options = optionsFormArray.at(0);
-  console.log(options);
   if (!options) {
     return null;
   } else {

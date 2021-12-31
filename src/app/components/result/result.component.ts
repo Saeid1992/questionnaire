@@ -18,6 +18,7 @@ export class ResultComponent {
   //#region Public properties
   title = '';
   cleanResult: [string, string, string][];
+  firstPageUrl = '';
   //#endregion
 
   //#region Private properties
@@ -45,6 +46,7 @@ export class ResultComponent {
     this.cleanResult = [];
     this.answerConnector = this.globalValuesService.MULTI_ANSWER_CONNECTOR;
     this.prepareResult();
+    this.firstPageUrl = '/';
   }
 
   //#endregion

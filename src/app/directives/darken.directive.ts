@@ -15,7 +15,7 @@ export class DarkenDirective  {
   }
 
   @HostListener('mouseleave') mouseleave (eventData: Event) {
-    this.renderer.setStyle(this.elementRef.nativeElement, 'background-color','#80bfff');
-    this.renderer.setStyle(this.elementRef.nativeElement, 'color','black');
+    this.renderer.setStyle(this.elementRef.nativeElement, 'background-color','#1284f5');
+    this.renderer.setStyle(this.elementRef.nativeElement, 'color','white');
   }
 }

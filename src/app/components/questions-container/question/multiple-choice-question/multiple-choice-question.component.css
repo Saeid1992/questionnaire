@@ -2,7 +2,9 @@
   margin: 0.5rem;
   border-bottom: 5px solid #004080;
   border-radius: 10%;
-  background-color: #80bfff;
+  /* background-color: #80bfff; */
+  background-color: #1284f5;
+  color: white;
 }
 
 .option-container :hover {

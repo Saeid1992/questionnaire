@@ -5,7 +5,6 @@ export function RequiredSingleAnswerForMultipleChoice(
   control: AbstractControl
 ): { [key: string]: boolean } | null {
   const formValue = control.get('choice')?.value;
-  console.log(control.get('choice')?.value);
   if (!Array.isArray(formValue)) {
     return null;
   } else {

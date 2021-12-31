@@ -21,8 +21,7 @@ body {
 body {
   margin: 0;
   box-sizing: border-box;
-  background: linear-gradient(#ffffff,#b3ecff);
-  /* background-position: center; */
+  background: linear-gradient(#8bc1f7,white,white,#8bc1f7);
   background-repeat: no-repeat;
   background-size: cover;
 }

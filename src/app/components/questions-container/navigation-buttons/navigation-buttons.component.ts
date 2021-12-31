@@ -1,8 +1,5 @@
-import {
-  Component,
-  Input,
-  OnInit
-} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { GlobalValuesService } from 'src/app/services/global-values.service';
 import { QuestionsService } from 'src/app/services/questions.service';
 
@@ -22,7 +19,9 @@ export class NavigationButtonsComponent implements OnInit {
   symbolOfNextQuestion = this.globalValuesService.NEXT_QUESTION_SYMBOL;
   nextQuestion = '';
   previousQuestion = '';
+  resultPage = '';
   isNotValid = false;
+  canViewResultPage = true;
   //#endregion
 
   //#endregion
@@ -31,14 +30,19 @@ export class NavigationButtonsComponent implements OnInit {
   constructor(
     private globalValuesService: GlobalValuesService,
     private questionsService: QuestionsService,
+    private router: Router
   ) {
     this.nextQuestion = this.globalValuesService.NEXT_QUESTION_TEXT;
     this.previousQuestion = this.globalValuesService.PREVIOUS_QUESTION_TEXT;
+    this.resultPage = this.globalValuesService.RESULT_PAGE;
   }
 
-  ngOnInit() : void {
-    this.questionsService.isValid.subscribe(isFormValid => {
+  ngOnInit(): void {
+    this.questionsService.isValid.subscribe((isFormValid) => {
       this.isNotValid = !isFormValid;
+    });
+    this.questionsService.isLastQuestionValid.subscribe((isValid) => {
+      this.canViewResultPage = isValid;
     });
   }
 
@@ -59,6 +63,14 @@ export class NavigationButtonsComponent implements OnInit {
         this.questionsService.questionChanged.emit(this.nextQuestion);
         break;
     }
+  }
+
+  /**
+   * Navigates to the result page
+   */
+  navigateToResultPage(): void {
+    let secretKey = this.questionsService.resultsKey;
+    this.router.navigate([this.resultPage, secretKey]);
   }
   //#endregion
 }

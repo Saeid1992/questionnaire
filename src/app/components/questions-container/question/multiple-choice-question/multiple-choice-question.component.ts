@@ -7,7 +7,7 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { Direction } from 'src/app/models/direction-change.enum';
 import {
   Choice,
@@ -150,11 +150,11 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
             this.questionsService.isLastQuestionValid.next(
               this.questionFormMultiple.valid
             );
-          } else {
-            this.questionsService.isLastQuestionValid.next(
-              this.questionFormMultiple.valid
-            );
           }
+        } else {
+          this.questionFormContainer.clearValidators();
+          this.questionFormContainer.updateValueAndValidity();
+          this.questionsService.isValid.emit(this.questionFormContainer.valid);
         }
         break;
       case false:
@@ -174,11 +174,10 @@ export class MultipleChoiceQuestionComponent implements OnInit, OnChanges {
             );
           }
         } else {
-          this.questionsService.isLastQuestionValid.next(
-            this.questionFormMultiple.valid
-          );
+          this.questionFormSingle.clearValidators();
+          this.questionFormSingle.updateValueAndValidity();
+          this.questionsService.isValid.emit(this.questionFormSingle.valid);
         }
-
         if (this.prevAnswer) {
           this.questionFormSingle.setValue({
             choice: this.prevAnswer,

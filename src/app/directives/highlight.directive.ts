@@ -9,7 +9,7 @@ export class HighlightDirective {
   }
 
   @HostListener('mouseenter') mouseover (eventData: Event) {
-    this.renderer.setStyle(this.elementRef.nativeElement, 'background-color','#80bfff');
+    this.renderer.setStyle(this.elementRef.nativeElement, 'background-color','#1284f5');
     this.renderer.setStyle(this.elementRef.nativeElement, 'color','white');
   }
 

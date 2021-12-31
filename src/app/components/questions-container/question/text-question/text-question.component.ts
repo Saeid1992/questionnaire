@@ -90,7 +90,9 @@ export class TextQuestionComponent implements OnInit, OnChanges {
         this.questionsService.isLastQuestionValid.next(this.questionForm.valid);
       }
     } else {
-      this.questionsService.isLastQuestionValid.next(this.questionForm.valid);
+      this.questionForm.clearValidators();
+      this.questionForm.updateValueAndValidity({emitEvent: false});
+      this.questionsService.isValid.emit(this.questionForm.valid);
     }
   }
   //#endregion

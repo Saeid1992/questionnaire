@@ -4,29 +4,22 @@
   </header>
   <div class="main-container">
     <div class="progress-container">
-      <progress
-        [value]="passedQuestions"
-        [max]="totalQuestions"
-      ></progress>
-      <p>{{calculatePercentageOfCompletion()}}</p>
+      <progress [value]="passedQuestions" [max]="totalQuestions"></progress>
+      <p>{{ calculatePercentageOfCompletion() }}</p>
     </div>
     <div class="question-container" [ngClass]="specifyClass()">
       <app-question [question]="currentQuestion"></app-question>
     </div>
+    <div class="required-text-container">
+      <small *ngIf="currentQuestion.required">*Required*</small>
+    </div>
     <div class="navigation-buttons-container">
       <app-navigation-buttons
         [isFirst]="isFirstQuestion"
-        [isLast]="isLastQuestion"
-      ></app-navigation-buttons>
+        [isLast]="isLastQuestion">
+      </app-navigation-buttons>
     </div>
     <br />
-    <div class="result-button-container">
-      <button (click)="navigateToResultPage()"
-              *ngIf="isLastQuestion"
-              [disabled]="!canProceedToResultPage">
-        Antworten ansehen
-      </button>
-    </div>
     <div class="description-container">
       <p>{{ description }}</p>
     </div>

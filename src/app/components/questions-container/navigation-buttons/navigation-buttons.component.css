@@ -8,6 +8,7 @@ button {
   display: inline-block;
   transition-duration: 50ms;
   cursor: pointer;
+  font-family: 'Comfortaa';
   font-size: 1.5rem;
 }
 
@@ -24,4 +25,12 @@ button:disabled {
 
 button:focus {
   outline: none;
+}
+.navigation-buttons-container {
+  margin-bottom: 0.25rem;
+  text-align: center;
+}
+
+.result-button-container {
+  text-align: center;
 }

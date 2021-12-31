@@ -1,12 +1,22 @@
-<button
-  data-testid="previous-question-button"
-  [disabled]="isFirst"
-  (click)="changeCurrentQuestion(this.previousQuestion)">
-  {{ symbolOfPreviousQuestion }}
-</button>
-<button
-  data-testid="next-question-button"
-  [disabled]="isLast || isNotValid"
-  (click)="changeCurrentQuestion(this.nextQuestion)">
-  {{ symbolOfNextQuestion }}
-</button>
+<div class="navigation-buttons-container">
+  <button
+    data-testid="previous-question-button"
+    [disabled]="isFirst"
+    (click)="changeCurrentQuestion(this.previousQuestion)">
+    {{ symbolOfPreviousQuestion }}
+  </button>
+  <button
+    data-testid="next-question-button"
+    [disabled]="isLast || isNotValid"
+    (click)="changeCurrentQuestion(this.nextQuestion)">
+    {{ symbolOfNextQuestion }}
+  </button>
+</div>
+<div class="result-button-container">
+  <button
+    (click)="navigateToResultPage()"
+    *ngIf="isLast"
+    [disabled]="!canViewResultPage">
+    Antworten ansehen
+  </button>
+</div>

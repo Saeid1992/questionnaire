@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { QuestionsService } from 'src/app/services/questions.service';
 import { Questionnaire } from 'src/app/models/questionnaire.model';
 import { MultipleChoiceQuestion } from 'src/app/models/multiple-choice-question';
@@ -7,6 +7,7 @@ import { QuestionType, SimpleJump } from 'src/app/models/question.model';
 import { GlobalValuesService } from 'src/app/services/global-values.service';
 import { Router } from '@angular/router';
 import { Direction } from 'src/app/models/direction-change.enum';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -14,14 +15,13 @@ import { Direction } from 'src/app/models/direction-change.enum';
   templateUrl: './questions-container.component.html',
   styleUrls: ['./questions-container.component.css'],
 })
-export class QuestionsContainerComponent implements OnInit {
+export class QuestionsContainerComponent implements OnInit, OnDestroy {
   //#region Public properties
   title = '';
   description = '';
   currentQuestion: TextQuestion | MultipleChoiceQuestion;
   isFirstQuestion = true;
   isLastQuestion = false;
-  canProceedToResultPage!: boolean;
   passedQuestions = 0;
   totalQuestions = 0;
   //#endregion
@@ -35,13 +35,14 @@ export class QuestionsContainerComponent implements OnInit {
   private formerQuestionsIndex: number[] = [];
   private animationType = '';
   private resultPage = '';
+  private subscription = new Subscription();
   //#endregion
 
   //#region Lifecycle hooks
   constructor(
     private questionsService: QuestionsService,
     private globalValuesService: GlobalValuesService,
-    private router: Router,
+    private router: Router
   ) {
     this.questionnaire = {} as Questionnaire;
     this.currentQuestion = {} as TextQuestion; // or as MultipleChoiceQuestion
@@ -52,12 +53,13 @@ export class QuestionsContainerComponent implements OnInit {
 
   ngOnInit(): void {
     this.getDataFromFile();
-    this.questionsService.isLastQuestionValid.subscribe(isValid => {
-      this.canProceedToResultPage = isValid;
-    });
     this.questionsService.questionChanged.subscribe((direction) => {
       this.onQuestionChanged(direction);
     });
+  }
+
+  ngOnDestroy() : void {
+    this.subscription.unsubscribe();
   }
 
   //#endregion
@@ -164,6 +166,7 @@ export class QuestionsContainerComponent implements OnInit {
     this.isFirstQuestion = false;
   }
 
+
   /**
    * Navigates to the result page
    */
@@ -198,19 +201,22 @@ export class QuestionsContainerComponent implements OnInit {
    * Subscribes to the questionnaire data provided by the service
    */
   private getDataFromFile(): void {
-    this.questionsService.getAllQuestions().subscribe((data: Questionnaire) => {
-      this.questionnaire = data;
-      this.title = this.questionsService.questionnaireTitle;
-      this.description = data.description;
-      this.questionsService.questionsWithAnswers = JSON.parse(
-        JSON.stringify(this.questionnaire.questions)
-      );
-      this.totalQuestions = this.questionsService.questionsWithAnswers.length;
-      this.lastQuestionIndex = this.totalQuestions - 1;
-      this.startQuestionnaire();
-    }, (err) => {
-      console.warn(err);
-    });
+    this.subscription = this.questionsService.getAllQuestions().subscribe(
+      (data: Questionnaire) => {
+        this.questionnaire = data;
+        this.title = this.questionsService.questionnaireTitle;
+        this.description = data.description;
+        this.questionsService.questionsWithAnswers = JSON.parse(
+          JSON.stringify(this.questionnaire.questions)
+        );
+        this.totalQuestions = this.questionsService.questionsWithAnswers.length;
+        this.lastQuestionIndex = this.totalQuestions - 1;
+        this.startQuestionnaire();
+      },
+      (err) => {
+        console.warn(err);
+      }
+    );
   }
 
   /**

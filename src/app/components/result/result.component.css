@@ -45,3 +45,24 @@
     color: #004080;
   }
 }
+
+.button-container {
+  text-align: center;
+  margin: 1rem auto;
+}
+
+button {
+  background-color: white;
+  border: 1px solid #004080;
+  color: #004080;
+  padding: 1rem 2rem;
+  text-align: center;
+  cursor: pointer;
+  font-family: 'Comfortaa';
+  font-size: 1.5rem;
+}
+
+button:hover {
+  color: white;
+  background-color: #004080;
+}
